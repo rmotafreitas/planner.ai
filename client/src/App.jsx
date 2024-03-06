@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { UserIdContext } from "./contexts/user.context";
 import { LoginPage } from "./pages/Login";
 import { ProfilePage } from "./pages/me/Profile";
+import { TripPageVisualizer } from "./pages/me/Trip";
 
 export function App() {
   const [userId, setUserId] = useState("");
@@ -26,6 +27,7 @@ export function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<LoginPage />} />
             <Route path="/me" element={<ProfilePage />} />
+            <Route path="/me/trips/:tripId" element={<TripPageVisualizer />} />
             {/* <Route path="*" element={<NotFound />} />*/}
           </Routes>
         </Router>

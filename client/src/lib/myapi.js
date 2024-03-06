@@ -10,14 +10,28 @@ const api = axios.create({
 
 const postTrip = async (trip) => {
   console.log("Trying to post trip: ", trip);
-  const res = await api.post("/trips", {
+  let res = await api.post("/trips", {
     startLocationITACode: trip.originITACode,
     endLocationITACode: trip.destinationITACode,
     JSON: JSON.stringify(trip),
     photoURL: trip.photo,
   });
-  console.log(res.data);
+  if (res.status !== 200) {
+    throw new Error("Failed to post trip");
+  } else {
+    res = await getTripCompletion(res.data.tripId);
+    if (res.status !== 200) {
+      throw new Error("Failed to generate trip completion");
+    }
+    return res;
+  }
+};
+
+const getTripCompletion = async (tripId) => {
+  const res = await api.post(`/ai/complete`, {
+    tripId,
+  });
   return res.data;
 };
 
-export { api, postTrip };
+export { api, postTrip, getTripCompletion };
