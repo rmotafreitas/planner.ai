@@ -7,16 +7,63 @@ async function main() {
   await prisma.prompt.create({
     data: {
       title: "Title for Prompt 1",
-      template: `Your role is to generate ...
+      template: `
+      Your role is to generate a detailed itinerary for the trip, taking into account arrival and departure times:
+- OBJCET {
+	Short introduction to the destination
+	- STRING
+	
+	Provide a list of sights and attractions in the destination city, based on the geographical coordinates provided, including descriptions. If there is no information in TRIP about this, you can add it yourself
+	- pointsOfInterest: ARRAY[OBJCET {
+		LOCATION: STRING,
+		DESCRIPTION: STRING,
+		ADDITIONAL_MONEY: NUMBER,
+	}]
 
-Return ONLY the three titles in list format as in the example below:
+	Give suggestions on the best accommodation options in the destination city, taking into account price preferences, and information already obtained and new. If there is no information on TRIP about this, you can add it yourself
+	- hostingStay: ARRAY[OBJCET {
+		LOCATION: STRING,
+		DESCRIPTION: STRING,
+		MONEY: NUMBER,
+	}]
+
+Offer information about the local culture and ETIQUETTE of the destination country, TRADITIONS, COMPLIANCES, what is typically EAT/typical foods, SURVIVAL LANGUAGE, SURVIVAL LANGUAGE includes greetings phrases, goodbye phrases, some weather phrases, excesume me phrases/expressions
+	- OBJECT {
+		ETIQUETTE: ARRAY[STRING],
+		GREETINGS: ARRAY[STRING],
+		FOOD: ARRAY[STRING],
+		LANGUAGE: ARRAY[OBJCET {
+			IN_LOCAL_LANGUAGE: STRING
+			PRONUNCIATION: STRING
+		}]
+	}
+	
+
+	Provide useful travel tips, such as public transportation available in the city, safety precautions and money-saving tips.
+	- TIPS: OBJECT {
+		TRAVEL_RELATED: STRING
+		ECONOMY_RELATED: STRING
+	}
+
+	With the existing temperature data, say things like, is it important to use an umbrella?
+	- WEATHER_TEXT: STRING
+}
+
+Return ONLY a json object in list format as in the example below, if there no information in certain keys, create it up yoursef, dont leave any empty string neither empty arrays, dont put [], craft/create the information yourself if needed:
 '''
-- Trip
+{
+     "introductionText": FILL,
+     "pointsOfInterest": FILL,
+      "hostingStay": FILL,
+      "usefulInformations": FILL,
+      "tips": FILL,
+      "weatherText": FILL
+}
 '''
 
 Trip:
 '''
-{trip}
+{JSON}
 '''`.trim(),
     },
   });
