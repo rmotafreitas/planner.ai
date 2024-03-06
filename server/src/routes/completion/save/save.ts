@@ -8,26 +8,26 @@ export async function completionSave(
   userId: string
 ) {
   const bodySchema = z.object({
-    id: z.string(),
+    tripId: z.string(),
     resultText: z.string(),
     promptText: z.string(),
   });
 
-  const { id, resultText, promptText } = bodySchema.parse(request.body);
+  const { tripId, resultText, promptText } = bodySchema.parse(request.body);
 
-  const article = await prisma.log.findFirst({
+  const trip = await prisma.log.findFirst({
     where: {
-      id,
+      tripId,
       userId,
       resultText,
     },
   });
 
-  if (!article) {
+  if (!trip) {
     const res = await prisma.log.create({
       data: {
         userId,
-        id,
+        tripId,
         resultText,
         promptText,
         messages: {
