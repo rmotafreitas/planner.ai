@@ -1,21 +1,39 @@
-import { getFlights, extractImportantDataFromAFlight } from "./amadeus";
+import {
+  getFlights,
+  extractImportantDataFromAFlight,
+  getHotelsWithDeals,
+} from "./amadeus";
 
-const handleExplore = async () => {
-  const tomorrowQuery = new Date();
-  tomorrowQuery.setDate(tomorrowQuery.getDate() + 1);
-  const tomorrow = tomorrowQuery.toISOString().split("T")[0];
-  console.log("Explorando voos para amanhã:", tomorrow);
-  const flights = await getFlights({
-    origin: "OPO",
-    destination: "HND",
-    date: tomorrow,
-    adults: 1,
-    max: 5,
+const createArrayWithImportantDataFromFlights = (flights) => {
+  return flights.map(extractImportantDataFromAFlight);
+};
+
+const handleExplore = async ({ origin, destination, date, adults, max }) => {
+  console.log("Explorando voos para amanhã:", date);
+  let flights = await getFlights({
+    origin,
+    destination,
+    date,
+    adults,
+    max,
   });
   console.log("Voos encontrados:");
+  flights = createArrayWithImportantDataFromFlights(flights);
   for (const flight of flights) {
-    console.log(extractImportantDataFromAFlight(flight));
+    console.log(flight);
   }
+  console.log("Fim dos voos encontrados.");
+  console.log("Exploração de hotéis para amanhã:", date);
+  console.log("Hotéis encontrados:");
+  let hotels = await getHotelsWithDeals({
+    cityCode: destination,
+    adults,
+    max,
+  });
+  for (const hotel of hotels) {
+    console.log(hotel);
+  }
+  console.log("Fim dos hotéis encontrados.");
 };
 
 export { handleExplore };

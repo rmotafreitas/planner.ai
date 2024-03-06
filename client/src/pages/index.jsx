@@ -43,7 +43,17 @@ export function HomePage() {
               <p className="font-semibold text-foreground">07-03-2024</p>
             </div>
           </div>
-          <Button onClick={handleExplore}>
+          <Button
+            onClick={() => {
+              handleExplore({
+                origin: "OPO",
+                destination: "LON",
+                date: "2024-03-07",
+                adults: 1,
+                max: 5,
+              });
+            }}
+          >
             <p>Explore Now!</p>
           </Button>
         </div>
