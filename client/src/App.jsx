@@ -15,7 +15,7 @@ export function App() {
     [userId, setUserId]
   ); */
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="white" storageKey="vite-ui-theme">
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
