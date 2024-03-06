@@ -10,6 +10,7 @@ import * as jose from "jose";
 import { getAICompletionHistoryRoute } from "./routes/get-ai-completion-log";
 import { deleteAICompletionHistoryRoute } from "./routes/delete-ai-completion-log";
 import { uploadTripJSONRoute } from "./routes/upload-trip-json";
+import { generateAICompletionRoute } from "./routes/generate-ai-completion-trip";
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const app = fastify();
@@ -53,6 +54,7 @@ app.register(getAILogsCompletion);
 app.register(getAICompletionHistoryRoute);
 app.register(deleteAICompletionHistoryRoute);
 app.register(uploadTripJSONRoute);
+app.register(generateAICompletionRoute);
 
 app.register(fastifystatic, {
   root: path.join(__dirname, "..", "tmp"),

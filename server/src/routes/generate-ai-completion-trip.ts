@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify";
-import { z } from "zod";
 import { completion } from "./completion/gen/generate";
 
 export const generateAICompletionRoute = async (app: FastifyInstance) => {

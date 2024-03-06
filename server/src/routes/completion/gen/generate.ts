@@ -89,6 +89,14 @@ Trip:
     ? prompt.replace("{JSON}", trip.JSON)
     : prompt + "\n With this trip: " + trip.JSON;
 
+  if (await prisma.log.findFirst({ where: { tripId } })) {
+    return reply.send({
+      message: await prisma.log
+        .findFirst({ where: { tripId } })
+        .then((log) => log?.resultText),
+    });
+  }
+
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo-16k-0613",
     temperature,
