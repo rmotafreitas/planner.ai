@@ -91,9 +91,7 @@ Trip:
 
   if (await prisma.log.findFirst({ where: { tripId } })) {
     return reply.send({
-      message: await prisma.log
-        .findFirst({ where: { tripId } })
-        .then((log) => log?.resultText),
+      log: await prisma.log.findFirst({ where: { tripId } }).then((log) => log),
     });
   }
 
@@ -130,5 +128,5 @@ Trip:
     },
   });
 
-  return reply.send({ message });
+  return reply.send({ log });
 }
