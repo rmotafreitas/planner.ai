@@ -25,6 +25,10 @@ const getToken = async () => {
 };
 
 // ============== FUNCTIONS THAT TAKE CARE OF THE FLIGHTS ==============
+const createArrayWithImportantDataFromFlights = (flights) => {
+  return flights.map(extractImportantDataFromAFlight);
+};
+
 const extractImportantDataFromAFlight = (flight) => {
   return {
     origem: flight.itineraries[0].segments[0].departure.iataCode,
@@ -66,7 +70,6 @@ const getFlights = async ({ origin, destination, date, adults, max }) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log("Response:", response.data.data);
     return response.data.data;
   } catch (error) {
     console.error("Erro:", error);
@@ -166,4 +169,135 @@ const getHotelsWithDeals = async ({ cityCode, adults, checkInDate, max }) => {
   return joinHotelAndHotelDeals(hotels, hotelDeals);
 };
 
-export { extractImportantDataFromAFlight, getFlights, getHotelsWithDeals };
+// ============== FUNCTIONS THAT TAKE CARE OF THE WEATHER AND LOCATION ==============
+const getWeather = async ({ destination, date }) => {
+  const apiKey = import.meta.env.VITE_API_WEATHER_API_KEY;
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${destination}&days=${14}&aqi=no&alerts=no&dt=${date}lang=pt`;
+
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao obter previsão do tempo:", error);
+    return null;
+  }
+};
+
+const extractImportantInformationFromWeather = (temp) => {
+  return {
+    currentWeather: {
+      condition: temp.current.condition.text,
+      conditionIcon: temp.current.condition.icon,
+      tempCelsius: temp.current.temp_c,
+      tempFahrenheit: temp.current.temp_f,
+      humidity: temp.current.humidity,
+      windSpeedMph: temp.current.wind_mph,
+      windSpeedKph: temp.current.wind_kph,
+    },
+    forecast: temp.forecast.forecastday.map((day) => ({
+      date: day.date,
+      maxTempCelsius: day.day.maxtemp_c,
+      minTempCelsius: day.day.mintemp_c,
+      condition: day.day.condition.text,
+    })),
+    astro: {
+      sunrise: temp.forecast.forecastday[0].astro.sunrise,
+      sunset: temp.forecast.forecastday[0].astro.sunset,
+      moonrise: temp.forecast.forecastday[0].astro.moonrise,
+      moonset: temp.forecast.forecastday[0].astro.moonset,
+      moonPhase: temp.forecast.forecastday[0].astro.moon_phase,
+    },
+  };
+};
+
+const extractLocationFromWeather = (weather) => {
+  return {
+    region: weather.location.region,
+    country: weather.location.country,
+    latitude: weather.location.lat,
+    longitude: weather.location.lon,
+    tzId: weather.location.tz_id,
+  };
+};
+
+// ============== FUNCTIONS THAT TAKE CARE OF POINTS OF INTEREST ==============
+const getPointsOfInterest = async ({ latitude, longitude }) => {
+  const url = `https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=${latitude}&longitude=${longitude}`;
+
+  const accessToken = await getToken();
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    console.error("Erro ao obter pontos de interesse:", error);
+    return null;
+  }
+};
+
+const extractImportantDataFromAPointOfInterest = (poi) => {
+  return {
+    name: poi.name,
+    type: poi.type,
+    subType: poi.subType,
+    category: poi.category,
+    tags: poi.tags,
+  };
+};
+
+const extractImportantDataFromPointsOfInterest = (pois) => {
+  return pois.map(extractImportantDataFromAPointOfInterest);
+};
+
+// ============== MAIN FUNCTION ==============
+const scrapeData = async ({ origin, destination, date, adults, max }) => {
+  let flights = await getFlights({
+    origin,
+    destination,
+    date,
+    adults,
+    max,
+  });
+  flights = createArrayWithImportantDataFromFlights(flights);
+  let hotels = await getHotelsWithDeals({
+    cityCode: destination,
+    adults,
+    max,
+  });
+  let weather = await getWeather({ destination, date });
+  const destinationData = extractLocationFromWeather(weather);
+  weather = extractImportantInformationFromWeather(weather);
+  let pointsOfInterest = await getPointsOfInterest({
+    latitude: destinationData.latitude,
+    longitude: destinationData.longitude,
+  });
+  pointsOfInterest = extractImportantDataFromPointsOfInterest(pointsOfInterest);
+  const data = {
+    originITACode: origin,
+    date,
+    adults,
+    flights,
+    hotels,
+    weather,
+    destination: destinationData,
+    pointsOfInterest,
+  };
+  return data;
+};
+
+export {
+  extractImportantDataFromAFlight,
+  getFlights,
+  getHotelsWithDeals,
+  getWeather,
+  extractImportantInformationFromWeather,
+  extractLocationFromWeather,
+  getPointsOfInterest,
+  extractImportantDataFromPointsOfInterest,
+  scrapeData,
+};
