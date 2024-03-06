@@ -18,12 +18,11 @@ model Prompt {
 
 model Trip {
   id                   String   @id @default(uuid())
-  name                 String
-  path                 String
   startLocationITACode String
   endLocationITACode   String
-  json                 String
+  JSON                 String
   createdAt            DateTime @default(now())
+  userId               String
   Log                  Log[]
 }
 

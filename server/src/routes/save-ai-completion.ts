@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { completionSave } from "./completion/save/save";
 
-export const saveAIVideoCompletion = async (app: FastifyInstance) => {
+export const saveAITripCompletion = async (app: FastifyInstance) => {
   app.post("/ai/complete/save", async (request, reply) => {
     // @ts-expect-error
     const userId = request.userID;

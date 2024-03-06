@@ -4,11 +4,12 @@ import { FastifyReply, FastifyRequest, fastify } from "fastify";
 import { getAllPromptsRoute } from "./routes/get-all-prompts";
 import fastifystatic from "@fastify/static";
 import path from "path";
-import { saveAIVideoCompletion } from "./routes/save-ai-completion";
+import { saveAITripCompletion } from "./routes/save-ai-completion";
 import { getAILogsCompletion } from "./routes/get-ai-log";
 import * as jose from "jose";
 import { getAICompletionHistoryRoute } from "./routes/get-ai-completion-log";
 import { deleteAICompletionHistoryRoute } from "./routes/delete-ai-completion-log";
+import { uploadTripJSONRoute } from "./routes/upload-trip-json";
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const app = fastify();
@@ -47,10 +48,11 @@ app.get("/", async (request, reply) => {
 });
 
 app.register(getAllPromptsRoute);
-app.register(saveAIVideoCompletion);
+app.register(saveAITripCompletion);
 app.register(getAILogsCompletion);
 app.register(getAICompletionHistoryRoute);
 app.register(deleteAICompletionHistoryRoute);
+app.register(uploadTripJSONRoute);
 
 app.register(fastifystatic, {
   root: path.join(__dirname, "..", "tmp"),

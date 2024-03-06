@@ -7,20 +7,20 @@ import { openai, streamRes } from "../../../lib/opeanai";
 
 export async function completion(request: FastifyRequest, reply: FastifyReply) {
   const bodySchema = z.object({
-    id: z.string(),
+    tripId: z.string(),
     prompt: z.string(),
     temperature: z.number().min(0).max(1).default(0.5),
   });
 
-  const { id, prompt, temperature } = bodySchema.parse(request.body);
+  const { tripId, prompt, temperature } = bodySchema.parse(request.body);
 
   const trip = await prisma.trip.findUniqueOrThrow({
     where: {
-      id,
+      id: tripId,
     },
   });
 
-  if (!trip /* || !trip?.*/) {
+  if (!trip || !trip?.JSON) {
     return reply.status(400).send({ error: "Trip not found" });
   }
 
