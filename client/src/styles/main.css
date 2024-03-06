@@ -1,5 +1,5 @@
 /* Hanko CSS */
-/* @import "./hanko.styles.css"; */
+@import "./hanko.styles.css";
 
 /* Tailwind CSS */
 @tailwind base;

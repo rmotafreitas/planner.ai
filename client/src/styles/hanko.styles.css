@@ -1,0 +1,108 @@
+hanko-auth,
+hanko-profile {
+  --brand-color: #506cf0;
+  --brand-color-shade-1: #6b84fb;
+  --brand-contrast-color: white;
+
+  --error-color: #e82020;
+  --link-color: #506cf0;
+
+  /* Font Styles */
+  --font-weight: 400;
+  --font-size: 16px;
+  --font-family: sans-serif;
+
+  /* Border Styles */
+  --border-radius: 8px;
+  --border-style: solid;
+  --border-width: 1px;
+
+  /* Item Styles */
+  --item-height: 34px;
+  --item-margin: 0.5rem 0;
+
+  /* Container Styles */
+  --container-padding: 30px;
+
+  /* Headline Styles */
+  --headline1-font-size: 24px;
+  --headline1-font-weight: 600;
+  --headline1-margin: 0 0 1rem;
+
+  --headline2-font-size: 16px;
+  --headline2-font-weight: 600;
+  --headline2-margin: 1rem 0 0.5rem;
+
+  /* Divider Styles */
+  --divider-padding: 0 42px;
+  --divider-visibility: visible;
+
+  /* Link Styles */
+  --link-text-decoration: none;
+  --link-text-decoration-hover: underline;
+
+  /* Input Styles */
+  --input-min-width: 14em;
+
+  /* Button Styles */
+  --button-min-width: max-content;
+}
+
+hanko-auth::part(form-item) {
+  /* Force the input fields and buttons are on top of each other */
+  min-width: 100%;
+}
+
+hanko-auth::part(container) {
+  background: var(--background);
+}
+
+hanko-auth::part(headline1) {
+  color: var(--primary);
+}
+
+hanko-auth::part(headline2) {
+  color: var(--primary);
+}
+
+hanko-auth::part(divider-text) {
+  background: var(--background);
+}
+
+hanko-auth::part(divider-line) {
+  color: var(--primary);
+}
+
+hanko-auth::part(primary-button) {
+  @apply text-white;
+  @apply bg-primary;
+  @apply border-primary;
+}
+
+hanko-auth::part(primary-button):hover {
+  @apply text-primary;
+  @apply bg-white;
+}
+
+hanko-auth::part(paragraph) {
+  @apply text-foreground;
+}
+
+hanko-profile::part(paragraph),
+hanko-profile::part(headline1) {
+  @apply text-foreground;
+}
+
+hanko-auth::part(link) {
+  @apply text-foreground;
+}
+
+hanko-auth {
+  --background-color: white;
+  --container-max-width: 410px;
+}
+
+hanko-profile {
+  --background-color: transparent;
+  --color: var(--foreground);
+}

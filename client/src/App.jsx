@@ -5,6 +5,7 @@ import { ThemeProvider } from "./components/theme-provider";
 import { useMemo, useState } from "react";
 import { UserIdContext } from "./contexts/user.context";
 import { LoginPage } from "./pages/Login";
+import { ProfilePage } from "./pages/me/Profile";
 
 export function App() {
   const [userId, setUserId] = useState("");
@@ -24,6 +25,7 @@ export function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<LoginPage />} />
+            <Route path="/me" element={<ProfilePage />} />
             {/* <Route path="*" element={<NotFound />} />*/}
           </Routes>
         </Router>
