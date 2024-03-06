@@ -1,9 +1,8 @@
-import { OpenAIStream } from "ai";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
 
-import { openai, streamRes } from "../../../lib/opeanai";
+import { openai } from "../../../lib/opeanai";
 
 export async function completion(request: FastifyRequest, reply: FastifyReply) {
   let promptData = await prisma.prompt.findFirst();
@@ -100,10 +99,28 @@ Trip:
       },
     ],
     max_tokens: 400,
-    stream: true,
+    stream: false,
   });
 
-  const stream = OpenAIStream(response);
+  const message = response.choices[0].message.content;
 
-  return streamRes(stream, reply);
+  const log = await prisma.log.create({
+    data: {
+      userId: trip.userId,
+      tripId: trip.id,
+      resultText: message,
+      promptText: prompt,
+      messages: {
+        create: [
+          {
+            userId: trip.userId,
+            promptText: prompt,
+            resultText: message,
+          },
+        ],
+      },
+    },
+  });
+
+  return reply.send({ message });
 }
