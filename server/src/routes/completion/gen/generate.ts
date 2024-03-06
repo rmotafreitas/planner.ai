@@ -24,7 +24,7 @@ export async function completion(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send({ error: "Trip not found" });
   }
 
-  const promptMessage = prompt.replace("{trip}", "");
+  const promptMessage = prompt.replace("{JSON}", trip.JSON);
 
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo-16k-0613",
