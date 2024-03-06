@@ -86,7 +86,9 @@ Trip:
     return reply.status(400).send({ error: "Trip not found" });
   }
 
-  const promptMessage = prompt.replace("{JSON}", trip.JSON);
+  const promptMessage = prompt.toUpperCase().includes("JSON")
+    ? prompt.replace("{JSON}", trip.JSON)
+    : prompt + "\n With this trip: " + trip.JSON;
 
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo-16k-0613",
