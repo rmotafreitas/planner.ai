@@ -280,6 +280,7 @@ const scrapeData = async ({ origin, destination, date, adults, max }) => {
   pointsOfInterest = extractImportantDataFromPointsOfInterest(pointsOfInterest);
   const data = {
     originITACode: origin,
+    destinationITACode: destination,
     date,
     adults,
     flights,
