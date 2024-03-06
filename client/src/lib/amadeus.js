@@ -272,10 +272,11 @@ const scrapeData = async ({ origin, destination, date, adults, max }) => {
   let weather = await getWeather({ destination, date });
   const destinationData = extractLocationFromWeather(weather);
   weather = extractImportantInformationFromWeather(weather);
-  let pointsOfInterest = await getPointsOfInterest({
-    latitude: destinationData.latitude,
-    longitude: destinationData.longitude,
-  });
+  let pointsOfInterest =
+    (await getPointsOfInterest({
+      latitude: destinationData.latitude,
+      longitude: destinationData.longitude,
+    })) || [];
   pointsOfInterest = extractImportantDataFromPointsOfInterest(pointsOfInterest);
   const data = {
     originITACode: origin,

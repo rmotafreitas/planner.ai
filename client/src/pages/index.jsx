@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MAP } from "@/lib/locationsMap";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const options = Object.keys(MAP).map((key) => ({
   label: MAP[key],
@@ -41,6 +41,7 @@ export function HomePage() {
   const [startLocation, setStartLocation] = useState("");
   const [endLocation, setEndLocation] = useState("");
   const [date, setDate] = useState();
+  const maxPrice = useRef();
 
   return (
     <div className="flex flex-col gap-6 min-h-screen min-w-full">
@@ -159,24 +160,18 @@ export function HomePage() {
               </Popover>
             </div>
           </div>
-          <div className="flex flex-row gap-2 justify-evenly flex-1">
+          <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
             <div className="border-solid border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
               <Wallet size={32} weight="fill" className="text-primary" />
             </div>
             <div>
               <h1 className="text-sm text-primary">Price Range $</h1>
-              <div className="flex flex-row justify-center items-center gap-2">
-                <Input
-                  placeholder="Min"
-                  type="number"
-                  className="w-20 text-center"
-                />
-                <Input
-                  placeholder="Max"
-                  type="number"
-                  className="w-20 text-center"
-                />
-              </div>
+              <Input
+                placeholder="Max"
+                type="number"
+                className="w-20 text-center"
+                ref={maxPrice}
+              />
             </div>
           </div>
           <div className="flex flex-row gap-2 justify-evenly flex-1">
@@ -216,12 +211,14 @@ export function HomePage() {
           <Button
             onClick={() => {
               handleExplore({
-                origin: "OPO",
-                destination: "HND",
-                date: "2024-03-07",
+                origin: startLocation.toUpperCase(),
+                destination: endLocation.toUpperCase(),
+                date: date
+                  ? format(date, "yyyy-MM-dd")
+                  : format(new Date(Date.now() + 86400000), "yyyy-MM-dd"),
                 adults: 1,
-                max: 5,
-                priceRange: [800, 1000],
+                max: 10,
+                priceRange: [0, +maxPrice.current.value],
               });
             }}
           >
