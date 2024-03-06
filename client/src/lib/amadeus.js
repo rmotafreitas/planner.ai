@@ -254,6 +254,21 @@ const extractImportantDataFromPointsOfInterest = (pois) => {
   return pois.map(extractImportantDataFromAPointOfInterest);
 };
 
+// ============== PHOTO FUNCTION ==============
+
+const getPhoto = async (location) => {
+  const encodedCityName = encodeURIComponent(location); // Codificar o nome da cidade para URL
+  const accessKey = import.meta.env.VITE_API_UNSPLASH_ACCESS_KEY;
+  const url = `https://api.unsplash.com/photos/random?query=${encodedCityName}&client_id=${accessKey}&orientation=landscape`;
+  try {
+    const response = await axios.get(url);
+    return response.data.urls.regular;
+  } catch (error) {
+    console.error("Erro ao obter foto:", error);
+    return null;
+  }
+};
+
 // ============== MAIN FUNCTION ==============
 const scrapeData = async ({ origin, destination, date, adults, max }) => {
   let flights = await getFlights({
@@ -278,6 +293,7 @@ const scrapeData = async ({ origin, destination, date, adults, max }) => {
       longitude: destinationData.longitude,
     })) || [];
   pointsOfInterest = extractImportantDataFromPointsOfInterest(pointsOfInterest);
+  const photo = await getPhoto(destinationData.region);
   const data = {
     originITACode: origin,
     destinationITACode: destination,
@@ -288,6 +304,7 @@ const scrapeData = async ({ origin, destination, date, adults, max }) => {
     weather,
     destination: destinationData,
     pointsOfInterest,
+    photo,
   };
   return data;
 };
@@ -302,4 +319,5 @@ export {
   getPointsOfInterest,
   extractImportantDataFromPointsOfInterest,
   scrapeData,
+  getPhoto,
 };

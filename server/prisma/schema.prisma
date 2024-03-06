@@ -23,6 +23,7 @@ model Trip {
   JSON                 String
   createdAt            DateTime @default(now())
   userId               String
+  photoURL             String?
   Log                  Log[]
 }
 

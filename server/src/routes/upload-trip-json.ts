@@ -14,11 +14,11 @@ export const uploadTripJSONRoute = async (app: FastifyInstance) => {
       startLocationITACode: z.string(),
       endLocationITACode: z.string(),
       JSON: z.string(),
+      photoURL: z.string().optional(),
     });
 
-    const { startLocationITACode, endLocationITACode, JSON } = bodySchema.parse(
-      request.body
-    );
+    const { startLocationITACode, endLocationITACode, JSON, photoURL } =
+      bodySchema.parse(request.body);
 
     if (!startLocationITACode || !endLocationITACode || !JSON) {
       return reply.status(400).send({ error: "No trip uploaded" });
@@ -30,6 +30,7 @@ export const uploadTripJSONRoute = async (app: FastifyInstance) => {
         startLocationITACode,
         endLocationITACode,
         userId,
+        photoURL,
       },
     });
 

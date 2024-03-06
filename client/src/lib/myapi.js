@@ -14,6 +14,7 @@ const postTrip = async (trip) => {
     startLocationITACode: trip.originITACode,
     endLocationITACode: trip.destinationITACode,
     JSON: JSON.stringify(trip),
+    photoURL: trip.photo,
   });
   console.log(res.data);
   return res.data;
