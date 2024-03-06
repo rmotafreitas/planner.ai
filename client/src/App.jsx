@@ -7,7 +7,7 @@ export function App() {
       <div className="rounded-md w-fit flex flex-row gap-4">
         <div className="flex flex-row gap-2 justify-evenly flex-1">
           <div className="border-solid border-2 border-purple-300 justify-center flex items-center rounded-md w-12 h-12">
-            <MapPin size={32} weight="fill" color="purple" />
+            <MapPin size={32} weight="fill" className="text-primary" />
           </div>
           <div>
             <h1 className="text-sm">Destination</h1>
