@@ -19,6 +19,18 @@ import { MAP } from "@/lib/locationsMap";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/myapi";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 
 export function ProfilePage() {
   const hanko = useMemo(() => hankoInstance, []);
@@ -62,6 +74,12 @@ export function ProfilePage() {
   const inputRef = useRef(null);
   const [search, setSearch] = useState("");
 
+  const options = Object.keys(MAP).map((key) => ({
+    label: MAP[key],
+    value: key,
+  }));
+  const [startLocationOpen, setStartLocationOpen] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -88,8 +106,71 @@ export function ProfilePage() {
                 <DialogTrigger>News Letter</DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Cities that you want to visit</DialogTitle>
+                    <DialogTitle>NewsLetter Settings</DialogTitle>
                     <DialogDescription>
+                      <div className="flex flex-col gap-2 my-4 w-full justify-start">
+                        <p>
+                          Required to fill the initial location to get the news
+                          letter!
+                        </p>
+                        <Popover
+                          open={startLocationOpen}
+                          onOpenChange={setStartLocationOpen}
+                        >
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={startLocationOpen}
+                              className="w-full justify-between overflow-clip"
+                            >
+                              {userData?.itaCode
+                                ? options.find((option) => {
+                                    return (
+                                      option.value.toLowerCase() ===
+                                      userData?.itaCode.toLocaleLowerCase()
+                                    );
+                                  })?.label
+                                : "Select initial city..."}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            side="right"
+                            className="p-0"
+                            align="start"
+                          >
+                            <Command>
+                              <CommandInput placeholder="Search city..." />
+                              <CommandEmpty>No city found.</CommandEmpty>
+                              <ScrollArea
+                                className="w-full h-full"
+                                style={{ maxHeight: "200px" }}
+                              >
+                                <CommandGroup>
+                                  {options.map((option) => (
+                                    <CommandItem
+                                      key={option.value}
+                                      value={option.value}
+                                      onSelect={(currentValue) => {
+                                        setUserData({
+                                          ...userData,
+                                          itaCode:
+                                            currentValue === userData?.itaCode
+                                              ? ""
+                                              : currentValue.toUpperCase(),
+                                        });
+                                        setStartLocationOpen(false);
+                                      }}
+                                    >
+                                      {option.label}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </ScrollArea>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
                       <div className="flex flex-row gap-2 my-4 w-full justify-start items-center">
                         <Checkbox
                           checked={userData?.subscribedToNewsletter}
@@ -121,7 +202,9 @@ export function ProfilePage() {
                           if (
                             MAP[city]
                               .toLowerCase()
-                              .includes(search.toLowerCase())
+                              .includes(search.toLowerCase()) &&
+                            city.toLocaleLowerCase() !==
+                              userData?.itaCode.toLocaleLowerCase()
                           ) {
                             return (
                               <div key={city} className="flex flex-row gap-2">

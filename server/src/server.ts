@@ -82,7 +82,9 @@ app
         console.log(allUsers);
         for (const user of allUsers) {
           console.log("Enviando newsletter para", user.email);
-          const wishList = user.wishList.split(",").filter((x) => x !== "");
+          const wishList = user.wishList
+            .split(",")
+            .filter((x) => x !== "" && x !== user.itaCode);
           console.log(wishList);
         }
         // enviarNewsletter(); // Chame a função para enviar a newsletter aqui
