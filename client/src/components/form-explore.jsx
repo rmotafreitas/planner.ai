@@ -4,6 +4,7 @@ import {
   Calendar as CalendarIconPhospor,
   MapPin,
   Wallet,
+  DiceFive,
 } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 
@@ -72,190 +73,215 @@ export function FormExplore() {
   }
 
   return (
-    <div className="rounded-md w-fit flex flex-row max-xl:flex-col gap-4 justify-center items-center py-2 px-4 shadow-lg">
-      <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
-        <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
-          <MapPin size={32} weight="fill" className="text-primary" />
-        </div>
-        <div>
-          <h1 className="text-sm text-primary">Destination</h1>
-          <Popover open={startLocationOpen} onOpenChange={setStartLocationOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={startLocationOpen}
-                className="w-[200px] justify-between overflow-clip"
-              >
-                {startLocation
-                  ? options.find((option) => {
-                      return (
-                        option.value.toLowerCase() ===
-                        startLocation.toLocaleLowerCase()
-                      );
-                    })?.label
-                  : "Select city..."}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0 h-52">
-              <Command>
-                <CommandInput placeholder="Search city..." />
-                <CommandEmpty>No city found.</CommandEmpty>
-                <ScrollArea
-                  className="w-full h-full"
-                  style={{ maxHeight: "200px" }}
+    <div className="flex flex-col gap-4 justify-center items-center">
+      <div className="rounded-md w-fit flex flex-row max-xl:flex-col gap-4 justify-center items-center py-2 px-4 shadow-lg">
+        <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
+          <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
+            <MapPin size={32} weight="fill" className="text-primary" />
+          </div>
+          <div>
+            <h1 className="text-sm text-primary">Origin</h1>
+            <Popover
+              open={startLocationOpen}
+              onOpenChange={setStartLocationOpen}
+            >
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={startLocationOpen}
+                  className="w-[200px] justify-between overflow-clip"
                 >
-                  <CommandGroup>
-                    {options.map((option) => (
-                      <CommandItem
-                        key={option.value}
-                        value={option.label}
-                        onSelect={(currentValue) => {
-                          setStartLocation(
-                            currentValue === startLocation ? "" : currentValue
-                          );
-                          setStartLocationOpen(false);
-                        }}
-                      >
-                        {option.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </ScrollArea>
-              </Command>
-            </PopoverContent>
-          </Popover>
+                  {startLocation
+                    ? options.find((option) => {
+                        return (
+                          option.value.toLowerCase() ===
+                          startLocation.toLocaleLowerCase()
+                        );
+                      })?.label
+                    : "Select city..."}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0 h-52">
+                <Command>
+                  <CommandInput placeholder="Search city..." />
+                  <CommandEmpty>No city found.</CommandEmpty>
+                  <ScrollArea
+                    className="w-full h-full"
+                    style={{ maxHeight: "200px" }}
+                  >
+                    <CommandGroup>
+                      {options.map((option) => (
+                        <CommandItem
+                          key={option.value}
+                          value={option.label}
+                          onSelect={(currentValue) => {
+                            const key = Object.keys(MAP).find(
+                              (key) =>
+                                MAP[key].toLocaleLowerCase().trim() ===
+                                currentValue.toLocaleLowerCase().trim()
+                            );
+                            setStartLocation(key);
+                            setStartLocationOpen(false);
+                          }}
+                        >
+                          {option.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </ScrollArea>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
-        <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
-          <MapPin size={32} weight="fill" className="text-primary" />
-        </div>
-        <div>
-          <h1 className="text-sm text-primary">Destination</h1>
-          <Popover open={endLocationOpen} onOpenChange={setEndLocationOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={setEndLocationOpen}
-                className="w-[200px] justify-between overflow-clip"
-              >
-                {endLocation
-                  ? options.find((option) => {
-                      return (
-                        option.value.toLowerCase() ===
-                        endLocation.toLocaleLowerCase()
-                      );
-                    })?.label
-                  : "Select city..."}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0 h-52 overflow-visible">
-              <Command>
-                <CommandInput placeholder="Search city..." />
-                <CommandEmpty>No city found.</CommandEmpty>
-                <ScrollArea
-                  className="w-full h-full"
-                  style={{ maxHeight: "200px" }}
+        <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
+          <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
+            <MapPin size={32} weight="fill" className="text-primary" />
+          </div>
+          <div>
+            <h1 className="text-sm text-primary">Destination</h1>
+            <Popover open={endLocationOpen} onOpenChange={setEndLocationOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={setEndLocationOpen}
+                  className="w-[200px] justify-between overflow-clip"
                 >
-                  <CommandGroup>
-                    {options.map((option) => (
-                      <CommandItem
-                        key={option.value}
-                        value={option.label}
-                        onSelect={(currentValue) => {
-                          setEndLocation(
-                            currentValue === endLocation ? "" : currentValue
-                          );
-                          setEndLocationOpen(false);
-                        }}
-                      >
-                        {option.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </ScrollArea>
-              </Command>
-            </PopoverContent>
-          </Popover>
+                  {endLocation
+                    ? options.find((option) => {
+                        return (
+                          option.value.toLowerCase() ===
+                          endLocation.toLocaleLowerCase()
+                        );
+                      })?.label
+                    : "Select city..."}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0 h-52 overflow-visible">
+                <Command>
+                  <CommandInput placeholder="Search city..." />
+                  <CommandEmpty>No city found.</CommandEmpty>
+                  <ScrollArea
+                    className="w-full h-full"
+                    style={{ maxHeight: "200px" }}
+                  >
+                    <CommandGroup>
+                      {options.map((option) => (
+                        <CommandItem
+                          key={option.value}
+                          value={option.label}
+                          onSelect={(currentValue) => {
+                            const key = Object.keys(MAP).find(
+                              (key) =>
+                                MAP[key].toLocaleLowerCase().trim() ===
+                                currentValue.toLocaleLowerCase().trim()
+                            );
+                            setEndLocation(key);
+                            setEndLocationOpen(false);
+                          }}
+                        >
+                          {option.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </ScrollArea>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
-        <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
-          <Wallet size={32} weight="fill" className="text-primary" />
+        <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
+          <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
+            <Wallet size={32} weight="fill" className="text-primary" />
+          </div>
+          <div>
+            <h1 className="text-sm text-primary">Max Flight Price $</h1>
+            <Input
+              placeholder="Max"
+              type="number"
+              className="text-left"
+              min={0}
+              ref={maxPrice}
+            />
+          </div>
         </div>
-        <div>
-          <h1 className="text-sm text-primary">Max Flight Price $</h1>
-          <Input
-            placeholder="Max"
-            type="number"
-            className="text-left"
-            min={0}
-            ref={maxPrice}
-          />
+        <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
+          <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
+            <CalendarIconPhospor
+              size={32}
+              weight="fill"
+              className="text-primary"
+            />
+          </div>
+          <div>
+            <h1 className="text-sm text-primary">Date</h1>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
-        <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
-          <CalendarIconPhospor
-            size={32}
-            weight="fill"
-            className="text-primary"
-          />
-        </div>
-        <div>
-          <h1 className="text-sm text-primary">Date</h1>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[280px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+        <Button
+          className="text-white"
+          onClick={() => {
+            handleExplore({
+              origin: startLocation.toUpperCase(),
+              destination: endLocation.toUpperCase(),
+              date: date
+                ? format(date, "yyyy-MM-dd")
+                : format(new Date(Date.now() + 86400000), "yyyy-MM-dd"),
+              adults: 1,
+              max: 10,
+              maxPrice: +maxPrice.current.value,
+              setStatus,
+            })
+              .then((res) => {
+                console.log("res", res);
+                if (res) {
+                  router(`/me/trip/${res.trip.id}`);
+                }
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }}
+        >
+          <p>Explore Now!</p>
+        </Button>
       </div>
       <Button
-        className="text-white"
+        className="text-white w-fit"
         onClick={() => {
-          handleExplore({
-            origin: startLocation.toUpperCase(),
-            destination: endLocation.toUpperCase(),
-            date: date
-              ? format(date, "yyyy-MM-dd")
-              : format(new Date(Date.now() + 86400000), "yyyy-MM-dd"),
-            adults: 1,
-            max: 10,
-            maxPrice: +maxPrice.current.value,
-            setStatus,
-          })
-            .then((res) => {
-              console.log("res", res);
-              if (res) {
-                router(`/me/trip/${res.trip.id}`);
-              }
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+          const keys = Object.keys(MAP);
+          let random2 = keys[Math.floor(Math.random() * keys.length)];
+          while (random2 === startLocation) {
+            random2 = keys[Math.floor(Math.random() * keys.length)];
+          }
+          setEndLocation(random2);
         }}
       >
-        <p>Explore Now!</p>
+        <p>Random Destination</p>
+        <DiceFive size={24} weight="bold" className="ml-2" />
       </Button>
     </div>
   );
