@@ -161,11 +161,12 @@ export function FormExplore() {
           <Wallet size={32} weight="fill" className="text-primary" />
         </div>
         <div>
-          <h1 className="text-sm text-primary">Price Range $</h1>
+          <h1 className="text-sm text-primary">Max Flight Price $</h1>
           <Input
             placeholder="Max"
             type="number"
-            className="w-20 text-center"
+            className="text-left"
+            min={0}
             ref={maxPrice}
           />
         </div>
@@ -215,7 +216,7 @@ export function FormExplore() {
               : format(new Date(Date.now() + 86400000), "yyyy-MM-dd"),
             adults: 1,
             max: 10,
-            priceRange: [0, +maxPrice.current.value],
+            maxPrice: +maxPrice.current.value,
           })
             .then((res) => {
               console.log("res", res);
