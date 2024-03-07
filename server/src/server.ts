@@ -14,6 +14,7 @@ import { saveAITripCompletion } from "./routes/save-ai-completion";
 import { uploadTripJSONRoute } from "./routes/upload-trip-json";
 import { updateUser } from "./routes/user/update";
 import { prisma } from "./lib/prisma";
+import { sendNewsletter } from "./lib/utils";
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const app = fastify();
@@ -73,25 +74,35 @@ app
   })
   .then((address) => {
     console.log(`Server is listening on ${address}`);
-    // Configurar a tarefa cron para ser executada todos os dias às 9h
+    // Configure the cron job to run every day at 9 AM
     cron.schedule(
-      "*/1 * * * *",
+      "*/1 * * * *", // Schedule to run at 9 AM every day
       async () => {
-        console.log("Enviando newsletter...");
         const allUsers = await prisma.user.findMany();
         console.log(allUsers);
         for (const user of allUsers) {
-          console.log("Enviando newsletter para", user.email);
+          console.log("Sending newsletter to", user.email);
           const wishList = user.wishList
             .split(",")
             .filter((x) => x !== "" && x !== user.itaCode);
           console.log(wishList);
+          if (
+            wishList.length > 0 &&
+            user.email &&
+            user.subscribedToNewsletter &&
+            user.itaCode
+          ) {
+            sendNewsletter({
+              email: user.email,
+              wishList,
+              originCode: user.itaCode,
+            });
+          }
         }
-        // enviarNewsletter(); // Chame a função para enviar a newsletter aqui
       },
       {
         scheduled: true,
-        timezone: "Europe/Lisbon", // Defina o fuso horário apropriado
+        timezone: "Europe/Lisbon", // Set the appropriate time zone
       }
     );
   });
