@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { UserIdContext } from "@/contexts/user.context";
 import { hankoApi, hankoInstance, isLogged } from "@/lib/hanko";
 import { register } from "@teamhanko/hanko-elements";
-import { History, LogOutIcon, UserIcon, Star } from "lucide-react";
+import { History, LogOutIcon, UserIcon, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -18,12 +18,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { MAP } from "@/lib/locationsMap";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
+import { api } from "@/lib/myapi";
 
 export function ProfilePage() {
   const hanko = useMemo(() => hankoInstance, []);
 
   const { setUserId } = useContext(UserIdContext);
   const router = useNavigate();
+
+  const [userData, setUserData] = useState({});
 
   if (!isLogged()) {
     router("/auth");
@@ -35,10 +38,25 @@ export function ProfilePage() {
     router("/auth");
   };
 
+  async function getUserData() {
+    api
+      .post("/user/save", {
+        email: (await hanko.user.getCurrent()).email,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data);
+      });
+  }
+
   useEffect(() => {
-    register(hankoApi).catch((error) => {
-      console.error("Failed to register Hanko API", error);
-    });
+    register(hankoApi)
+      .catch((error) => {
+        console.error("Failed to register Hanko API", error);
+      })
+      .then(() => {
+        getUserData();
+      });
   }, []);
 
   const inputRef = useRef(null);
@@ -65,18 +83,33 @@ export function ProfilePage() {
               </Link>
             </Button>
             <Button className="flex flex-1 bg-yellow-500 text-white hover:bg-yellow-600 max-sm:w-full justify-center items-center">
-              <Star size={24} className="mr-2" />
+              <Mail size={24} className="mr-2" />
               <Dialog>
-                <DialogTrigger>Wish List</DialogTrigger>
+                <DialogTrigger>News Letter</DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Cities that you want to visit</DialogTitle>
                     <DialogDescription>
+                      <div className="flex flex-row gap-2 my-4 w-full justify-start items-center">
+                        <Checkbox
+                          checked={userData?.subscribedToNewsletter}
+                          onCheckedChange={(checked) => {
+                            setUserData({
+                              ...userData,
+                              subscribedToNewsletter: checked,
+                            });
+                          }}
+                        />
+                        <p>
+                          Get daily news letter about the cities that you want
+                          to go?
+                        </p>
+                      </div>
                       <div className="flex flex-row gap-2 my-4">
                         <Input ref={inputRef} placeholder="Search city..." />
                         <Button
+                          className="bg-primary text-white hover:bg-primary-dark"
                           onClick={() => {
-                            console.log(inputRef.current.value);
                             setSearch(inputRef.current.value);
                           }}
                         >
@@ -85,7 +118,6 @@ export function ProfilePage() {
                       </div>
                       <ScrollArea className="h-96">
                         {Object.keys(MAP).map((city) => {
-                          console.log(city);
                           if (
                             MAP[city]
                               .toLowerCase()
@@ -97,6 +129,27 @@ export function ProfilePage() {
                                   label={MAP[city]}
                                   name={city}
                                   id={city}
+                                  checked={userData?.wishList?.includes(city)}
+                                  onCheckedChange={(checked) => {
+                                    if (!checked) {
+                                      const str = userData.wishList
+                                        .split(",")
+                                        .filter((c) => c !== city)
+                                        .join(",");
+                                      setUserData({
+                                        ...userData,
+                                        wishList: str,
+                                      });
+                                    } else {
+                                      setUserData({
+                                        ...userData,
+                                        wishList:
+                                          userData.wishList != null
+                                            ? `${userData.wishList},${city}`
+                                            : city,
+                                      });
+                                    }
+                                  }}
                                 />
                                 <p>{MAP[city]}</p>
                               </div>
@@ -110,6 +163,10 @@ export function ProfilePage() {
                           onClick={() => {
                             setSearch("");
                             inputRef.current.value = "";
+                            setUserData({
+                              ...userData,
+                              wishList: "",
+                            });
                           }}
                         >
                           Clear
@@ -118,6 +175,14 @@ export function ProfilePage() {
                           className="bg-primary text-white hover:bg-primary-dark"
                           onClick={() => {
                             console.log("Save");
+                            console.log(userData);
+                            api
+                              .post("/user/save", {
+                                ...userData,
+                              })
+                              .then((res) => {
+                                console.log(res.data);
+                              });
                           }}
                         >
                           Save
