@@ -36,8 +36,18 @@ const options = Object.keys(MAP).map((key) => ({
   value: key,
 }));
 
+const statusMessages = {
+  flights: "Searching for flights...",
+  hotels: "Searching for hotels...",
+  weather: "Getting weather information...",
+  activities: "Getting activities...",
+  photo: "Getting photo...",
+  gpt: "Generating trip plan...",
+};
+
 export function FormExplore() {
   const router = useNavigate();
+  const [status, setStatus] = useState("waiting");
 
   const [startLocationOpen, setStartLocationOpen] = useState(false);
   const [endLocationOpen, setEndLocationOpen] = useState(false);
@@ -45,6 +55,21 @@ export function FormExplore() {
   const [endLocation, setEndLocation] = useState("");
   const [date, setDate] = useState();
   const maxPrice = useRef();
+
+  if (status !== "waiting") {
+    return (
+      <div className="flex flex-col justify-center items-center w-full h-full">
+        <img
+          className="w-36 h-36 animate-spin"
+          src="../../public/laoder.gif"
+          alt="loading"
+        />
+        <p className="text-primary text-2xl font-bold mt-4">
+          {statusMessages[status] || "Loading..."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-md w-fit flex flex-row max-xl:flex-col gap-4 justify-center items-center py-2 px-4 shadow-lg">
@@ -217,6 +242,7 @@ export function FormExplore() {
             adults: 1,
             max: 10,
             maxPrice: +maxPrice.current.value,
+            setStatus,
           })
             .then((res) => {
               console.log("res", res);

@@ -270,7 +270,15 @@ const getPhoto = async (location) => {
 };
 
 // ============== MAIN FUNCTION ==============
-const scrapeData = async ({ origin, destination, date, adults, max }) => {
+const scrapeData = async ({
+  origin,
+  destination,
+  date,
+  adults,
+  max,
+  setStatus,
+}) => {
+  setStatus("flights");
   let flights = await getFlights({
     origin,
     destination,
@@ -279,12 +287,15 @@ const scrapeData = async ({ origin, destination, date, adults, max }) => {
     max,
   });
   flights = createArrayWithImportantDataFromFlights(flights);
+  setStatus("hotels");
   let hotels = await getHotelsWithDeals({
     cityCode: destination,
     adults,
     max,
   });
+  setStatus("weather");
   let weather = await getWeather({ destination, date });
+  setStatus("activities");
   const destinationData = extractLocationFromWeather(weather);
   weather = extractImportantInformationFromWeather(weather);
   let pointsOfInterest =
@@ -293,6 +304,7 @@ const scrapeData = async ({ origin, destination, date, adults, max }) => {
       longitude: destinationData.longitude,
     })) || [];
   pointsOfInterest = extractImportantDataFromPointsOfInterest(pointsOfInterest);
+  setStatus("photo");
   const photo = await getPhoto(destinationData.region);
   const data = {
     originITACode: origin,
