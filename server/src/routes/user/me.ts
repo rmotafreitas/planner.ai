@@ -2,8 +2,8 @@ import { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { prisma } from "../../lib/prisma";
 
-export const saveWishList = async (app: FastifyInstance) => {
-  app.post("/user/wishlist", async (request, reply) => {
+export const userInfo = async (app: FastifyInstance) => {
+  app.post("/user/me", async (request, reply) => {
     // @ts-expect-error
     const userId = request.userID;
     if (!userId) {
@@ -11,11 +11,10 @@ export const saveWishList = async (app: FastifyInstance) => {
     }
 
     const bodySchema = z.object({
-      wishList: z.string().nonempty(),
-      email: z.string().email().nonempty(),
+      email: z.string().email().optional(),
     });
 
-    const { wishList, email } = bodySchema.parse(request.body);
+    const { email } = bodySchema.parse(request.body);
 
     const user = await prisma.user.findUnique({
       where: {
@@ -24,25 +23,19 @@ export const saveWishList = async (app: FastifyInstance) => {
     });
 
     if (!user) {
+      if (!email) {
+        throw new Error("Email is required");
+      }
       const newUser = await prisma.user.create({
         data: {
           id: userId as string,
-          wishList,
           email,
+          wishList: "",
         },
       });
       return newUser;
     }
 
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        wishList,
-      },
-    });
-
-    return updatedUser;
+    return user;
   });
 };
