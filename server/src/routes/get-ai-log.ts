@@ -10,7 +10,12 @@ export const getAILogsCompletion = async (app: FastifyInstance) => {
       throw new Error("Not authenticated");
     }
 
+    console.log("userId", userId);
+
     const log = await prisma.log.findMany({
+      where: {
+        userId,
+      },
       include: {
         trip: true,
       },

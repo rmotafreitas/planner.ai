@@ -117,8 +117,6 @@ export function ChatModal({ id, close, open }) {
     scrollChat();
   }, [completion, isLoading]);
 
-  let flag = 0;
-
   return (
     <Dialog open={open} onOpenChange={close}>
       <DialogOverlay className="bg-black/60 inset-0 fixed" />
@@ -138,8 +136,6 @@ export function ChatModal({ id, close, open }) {
           {messages &&
             messages.map((message, i) => {
               console.log("Message: ", i);
-              flag++;
-              if (flag < 2) return;
               return (
                 <>
                   <ChatBubble key={i} text={message.promptText} isAi={false} />
