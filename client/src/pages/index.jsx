@@ -1,7 +1,13 @@
 import { CardFeature } from "@/components/card-feature";
 import { FormExplore } from "@/components/form-explore";
 import { Navbar } from "@/components/navbar";
-import { Robot, Chat, EnvelopeSimple, Funnel } from "@phosphor-icons/react";
+import {
+  Robot,
+  Chat,
+  EnvelopeSimple,
+  Funnel,
+  ClockCounterClockwise,
+} from "@phosphor-icons/react";
 
 export function HomePage() {
   return (
@@ -55,6 +61,17 @@ export function HomePage() {
             description="Stay updated with the latest travel updates and news"
             Icon={() => (
               <EnvelopeSimple
+                className="w-20 h-20 text-primary border-border border-2 p-1 rounded-xl"
+                ocess
+              />
+            )}
+            weight="bold"
+          />
+          <CardFeature
+            title="History & Logs"
+            description="View your past plans and logs for future reference"
+            Icon={() => (
+              <ClockCounterClockwise
                 className="w-20 h-20 text-primary border-border border-2 p-1 rounded-xl"
                 ocess
               />
