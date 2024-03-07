@@ -114,3 +114,8 @@ hanko-profile {
   --display: flex;
   --flex-direction: column;
 }
+
+hanko-profile {
+  @apply grid;
+  @apply place-content-center;
+}
