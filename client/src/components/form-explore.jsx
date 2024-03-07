@@ -47,8 +47,8 @@ export function FormExplore() {
   const maxPrice = useRef();
 
   return (
-    <div className="bg-muted rounded-md w-fit flex flex-row gap-4 justify-center items-center py-2 px-4">
-      <div className="flex flex-row gap-2 justify-evenly flex-1">
+    <div className="bg-muted rounded-md w-fit flex flex-row max-xl:flex-col gap-4 justify-center items-center py-2 px-4">
+      <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
         <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
           <MapPin size={32} weight="fill" className="text-primary" />
         </div>
@@ -102,7 +102,7 @@ export function FormExplore() {
           </Popover>
         </div>
       </div>
-      <div className="flex flex-row gap-2 justify-evenly flex-1">
+      <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
         <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
           <MapPin size={32} weight="fill" className="text-primary" />
         </div>
@@ -171,7 +171,7 @@ export function FormExplore() {
           />
         </div>
       </div>
-      <div className="flex flex-row gap-2 justify-evenly flex-1">
+      <div className="flex flex-row gap-2 justify-evenly flex-1 items-center">
         <div className="border-2 border-border justify-center flex items-center rounded-md w-12 h-12">
           <CalendarIconPhospor
             size={32}

@@ -7,9 +7,13 @@ export const hankoApi = import.meta.env.VITE_HANKO_API_URL;
 export const hankoInstance = new Hanko(hankoApi);
 
 export const isLogged = () => {
-  const token = Cookies.get("hanko");
-  const payload = jose.decodeJwt(token ?? "");
-  const userID = payload.sub;
+  try {
+    const token = Cookies.get("hanko");
+    const payload = jose.decodeJwt(token ?? "");
+    const userID = payload.sub;
 
-  return !(!userID || token === undefined);
+    return !(!userID || token === undefined);
+  } catch (e) {
+    return false;
+  }
 };

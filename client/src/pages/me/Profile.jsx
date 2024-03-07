@@ -51,9 +51,16 @@ export function ProfilePage() {
   };
 
   async function getUserData() {
+    let email;
+    try {
+      email = (await hanko.user.getCurrent()).email;
+    } catch (error) {
+      console.error("Failed to get user data", error);
+      handleHankoLogout();
+    }
     api
       .post("/user/save", {
-        email: (await hanko.user.getCurrent()).email,
+        email: email,
       })
       .then((res) => {
         console.log(res.data);
@@ -65,9 +72,15 @@ export function ProfilePage() {
     register(hankoApi)
       .catch((error) => {
         console.error("Failed to register Hanko API", error);
+        handleHankoLogout();
       })
       .then(() => {
-        getUserData();
+        try {
+          getUserData();
+        } catch (error) {
+          console.error("Failed to get user data", error);
+          handleHankoLogout();
+        }
       });
   }, []);
 
