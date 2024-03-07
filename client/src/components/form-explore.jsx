@@ -109,7 +109,7 @@ export function FormExplore() {
                     {options.map((option) => (
                       <CommandItem
                         key={option.value}
-                        value={option.value}
+                        value={option.label}
                         onSelect={(currentValue) => {
                           setStartLocation(
                             currentValue === startLocation ? "" : currentValue
@@ -163,7 +163,7 @@ export function FormExplore() {
                     {options.map((option) => (
                       <CommandItem
                         key={option.value}
-                        value={option.value}
+                        value={option.label}
                         onSelect={(currentValue) => {
                           setEndLocation(
                             currentValue === endLocation ? "" : currentValue
