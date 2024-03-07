@@ -12,7 +12,6 @@ import { getAILogsCompletion } from "./routes/get-ai-log";
 import { getAllPromptsRoute } from "./routes/get-all-prompts";
 import { saveAITripCompletion } from "./routes/save-ai-completion";
 import { uploadTripJSONRoute } from "./routes/upload-trip-json";
-import { userInfo } from "./routes/user/me";
 import { updateUser } from "./routes/user/update";
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
@@ -59,7 +58,6 @@ app.register(deleteAICompletionHistoryRoute);
 app.register(uploadTripJSONRoute);
 app.register(generateAICompletionRoute);
 app.register(updateUser);
-app.register(userInfo);
 
 app.register(fastifystatic, {
   root: path.join(__dirname, "..", "tmp"),
