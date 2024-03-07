@@ -13,6 +13,7 @@ import { getAllPromptsRoute } from "./routes/get-all-prompts";
 import { saveAITripCompletion } from "./routes/save-ai-completion";
 import { uploadTripJSONRoute } from "./routes/upload-trip-json";
 import { updateUser } from "./routes/user/update";
+import { prisma } from "./lib/prisma";
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const app = fastify();
@@ -75,8 +76,15 @@ app
     // Configurar a tarefa cron para ser executada todos os dias às 9h
     cron.schedule(
       "*/1 * * * *",
-      () => {
+      async () => {
         console.log("Enviando newsletter...");
+        const allUsers = await prisma.user.findMany();
+        console.log(allUsers);
+        for (const user of allUsers) {
+          console.log("Enviando newsletter para", user.email);
+          const wishList = user.wishList.split(",").filter((x) => x !== "");
+          console.log(wishList);
+        }
         // enviarNewsletter(); // Chame a função para enviar a newsletter aqui
       },
       {

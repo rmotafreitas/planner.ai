@@ -20,6 +20,7 @@ model User {
   id                     String  @id @default(uuid())
   email                  String  @unique
   wishList               String // Joiont by comma
+  itaCode                String?
   subscribedToNewsletter Boolean @default(false)
 }
 

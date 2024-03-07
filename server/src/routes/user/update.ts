@@ -14,11 +14,11 @@ export const updateUser = async (app: FastifyInstance) => {
       wishList: z.string().optional(),
       email: z.string().email().optional(),
       subscribedToNewsletter: z.boolean().optional(),
+      itaCode: z.string().optional(),
     });
 
-    const { wishList, email, subscribedToNewsletter } = bodySchema.parse(
-      request.body
-    );
+    const { wishList, email, subscribedToNewsletter, itaCode } =
+      bodySchema.parse(request.body);
 
     const user = await prisma.user.findUnique({
       where: {
@@ -36,6 +36,7 @@ export const updateUser = async (app: FastifyInstance) => {
           wishList: wishList ?? "",
           email: email,
           subscribedToNewsletter: subscribedToNewsletter ?? false,
+          itaCode: itaCode ?? "",
         },
       });
       return newUser;
@@ -50,6 +51,7 @@ export const updateUser = async (app: FastifyInstance) => {
         email: email ?? user.email,
         subscribedToNewsletter:
           subscribedToNewsletter ?? user.subscribedToNewsletter,
+        itaCode: itaCode ?? user.itaCode,
       },
     });
 
