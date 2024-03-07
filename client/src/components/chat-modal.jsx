@@ -40,14 +40,14 @@ export function ChatSection({ id }) {
     >
       <DialogTrigger
         disabled={!id}
-        className="flex text-white items-center max-sm:w-full fixed bottom-4 right-4"
+        className="flex items-center fixed bottom-4 right-4"
       >
         <Button
           onClick={() => {
             setOpen(true);
           }}
           disabled={!id}
-          className="max-sm:w-full text-white"
+          className="text-white"
         >
           <MessagesSquareIcon className="w-4 h-4 mr-2" />
           AI Chat

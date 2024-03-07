@@ -10,6 +10,7 @@ import { Navbar } from "@/components/navbar";
 import { api } from "@/lib/myapi";
 import { FilterIcon } from "lucide-react";
 import { cols } from "./schema/trip.columns";
+import { isLogged } from "@/lib/hanko";
 
 export const deleteRow = async (id) => {
   const res = await api.delete(`/ai/complete/${id}`);
@@ -19,6 +20,10 @@ export const deleteRow = async (id) => {
 export function LogPage() {
   const router = useNavigate();
   const [history, setHistory] = useState();
+
+  if (!isLogged()) {
+    router("/auth");
+  }
 
   useEffect(() => {
     (async () => {
