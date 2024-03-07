@@ -40,7 +40,7 @@ export function ProfilePage() {
           </h1>
           <hanko-profile />
           <section className="w-full flex flex-row justify-center gap-2 items-center max-sm:flex-col">
-            <Button className="flex flex-1 bg-primary max-sm:w-full">
+            <Button className="flex flex-1 text-white bg-primary max-sm:w-full">
               <Link
                 to="/me/history"
                 className="flex flex-row items-center w-full h-full justify-center"
@@ -50,7 +50,7 @@ export function ProfilePage() {
               </Link>
             </Button>
             <Button
-              className="flex flex-1 bg-red-500 hover:bg-red-600 max-sm:w-full justify-center items-center"
+              className="flex flex-1 bg-red-500 text-white hover:bg-red-600 max-sm:w-full justify-center items-center"
               onClick={handleHankoLogout}
             >
               <LogOutIcon size={24} className="mr-2" />

@@ -54,8 +54,8 @@ const extractImportantDataFromAFlight = (flight) => {
     tipoViajante: flight.travelerPricings[0].travelerType,
     politicaBagagem: `Inclui ${flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity} malas de porão`,
     amenities:
-      flight.travelerPricings[0].fareDetailsBySegment[0].amenities.map(
-        (amenity) => amenity.description
+      flight?.travelerPricings[0]?.fareDetailsBySegment[0]?.amenities?.map(
+        (amenity) => amenity?.description
       ) || [],
   };
 };

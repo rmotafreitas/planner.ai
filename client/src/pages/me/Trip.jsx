@@ -1,16 +1,15 @@
 import { Navbar } from "@/components/navbar";
-import { UserIdContext } from "@/contexts/user.context";
+import { isLogged } from "@/lib/hanko";
 import { getTripCompletion } from "@/lib/myapi";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export function TripPageVisualizer() {
   const { tripId } = useParams();
 
-  const { userId } = useContext(UserIdContext);
   const router = useNavigate();
 
-  if (!userId) {
+  if (!isLogged()) {
     router("/auth");
   }
 
@@ -25,9 +24,6 @@ export function TripPageVisualizer() {
     if (tripId) {
       loadTrip(tripId).then((res) => {
         console.log("Loaded trip: ", res);
-        res.trip.JSON = JSON.parse(res.trip.JSON);
-        res.log.resultText = JSON.parse(res.log.resultText);
-        console.log("Parsed trip: ", res);
         setTripData(res);
       });
     }
@@ -38,7 +34,7 @@ export function TripPageVisualizer() {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <section className="bg-muted-foreground flex flex-row flex-1 justify-center">
-          <article className="flex flex-col gap-4 bg-primary-foreground w-3/4 px-4 py-8 mt-4 border-primary border-4 rounded-sm">
+          <article className="flex flex-col gap-4 bg-primary-foreground w-1/2 px-4 py-8 my-4 border-primary border-4 rounded-sm">
             <h1 className="text-3xl font-semibold">
               ✈️ Travel plan:{" "}
               {tripData.trip.JSON.destination.country +

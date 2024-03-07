@@ -19,8 +19,8 @@ const postTrip = async (trip) => {
   if (res.status !== 200) {
     throw new Error("Failed to post trip");
   } else {
-    res = await getTripCompletion(res.data.tripId);
-    if (res.status !== 200) {
+    res = await getTripCompletion(res.data.trip.id);
+    if (!res.log.resultText) {
       throw new Error("Failed to generate trip completion");
     }
     return res;
@@ -31,6 +31,8 @@ const getTripCompletion = async (tripId) => {
   const res = await api.post(`/ai/complete`, {
     tripId,
   });
+  res.data.log.resultText = JSON.parse(res.data.log.resultText);
+  res.data.trip.JSON = JSON.parse(res.data.trip.JSON);
   return res.data;
 };
 

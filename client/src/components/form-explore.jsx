@@ -5,6 +5,7 @@ import {
   MapPin,
   Wallet,
 } from "@phosphor-icons/react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Command,
@@ -36,6 +37,8 @@ const options = Object.keys(MAP).map((key) => ({
 }));
 
 export function FormExplore() {
+  const router = useNavigate();
+
   const [startLocationOpen, setStartLocationOpen] = useState(false);
   const [endLocationOpen, setEndLocationOpen] = useState(false);
   const [startLocation, setStartLocation] = useState("");
@@ -202,6 +205,7 @@ export function FormExplore() {
         </div>
       </div>
       <Button
+        className="text-white"
         onClick={() => {
           handleExplore({
             origin: startLocation.toUpperCase(),
@@ -212,7 +216,16 @@ export function FormExplore() {
             adults: 1,
             max: 10,
             priceRange: [0, +maxPrice.current.value],
-          });
+          })
+            .then((res) => {
+              console.log("res", res);
+              if (res) {
+                router(`/me/trip/${res.trip.id}`);
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+            });
         }}
       >
         <p>Explore Now!</p>

@@ -27,7 +27,7 @@ export function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<LoginPage />} />
             <Route path="/me" element={<ProfilePage />} />
-            <Route path="/me/trips/:tripId" element={<TripPageVisualizer />} />
+            <Route path="/me/trip/:tripId" element={<TripPageVisualizer />} />
             {/* <Route path="*" element={<NotFound />} />*/}
           </Routes>
         </Router>

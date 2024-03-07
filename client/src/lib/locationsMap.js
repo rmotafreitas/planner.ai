@@ -58,4 +58,5 @@ export const MAP = {
   ZRH: "Suíça, Zurique",
   DUB: "Irlanda, Dublin",
   TXL: "Alemanha, Berlim Tegel",
+  HND: "Japão, Tóquio Haneda",
 };
