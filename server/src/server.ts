@@ -1,3 +1,4 @@
+import { getAIChatSaveRoute } from "./routes/completion/chat/chat-save";
 import { fastifyCors } from "@fastify/cors";
 import fastifystatic from "@fastify/static";
 import "dotenv/config";
@@ -15,6 +16,8 @@ import { uploadTripJSONRoute } from "./routes/upload-trip-json";
 import { updateUser } from "./routes/user/update";
 import { prisma } from "./lib/prisma";
 import { sendNewsletter } from "./lib/utils";
+import { getAIChatCompleteRoute } from "./routes/completion/chat/chat-completition";
+import { getAIChatRoute } from "./routes/completion/chat/chat";
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const app = fastify();
@@ -60,6 +63,9 @@ app.register(deleteAICompletionHistoryRoute);
 app.register(uploadTripJSONRoute);
 app.register(generateAICompletionRoute);
 app.register(updateUser);
+app.register(getAIChatCompleteRoute);
+app.register(getAIChatRoute);
+app.register(getAIChatSaveRoute);
 
 app.register(fastifystatic, {
   root: path.join(__dirname, "..", "tmp"),
