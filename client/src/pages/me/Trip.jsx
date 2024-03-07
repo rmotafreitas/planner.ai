@@ -11,10 +11,10 @@ export function TripPageVisualizer() {
   const router = useNavigate();
 
   if (!userId) {
-    // router("/auth");
+    router("/auth");
   }
 
-  const [trip, setTrip] = useState(null);
+  const [tripData, setTripData] = useState(null);
 
   const loadTrip = async (trip) => {
     const res = await getTripCompletion(trip);
@@ -25,19 +25,108 @@ export function TripPageVisualizer() {
     if (tripId) {
       loadTrip(tripId).then((res) => {
         console.log("Loaded trip: ", res);
-        setTrip(res);
+        res.trip.JSON = JSON.parse(res.trip.JSON);
+        res.log.resultText = JSON.parse(res.log.resultText);
+        console.log("Parsed trip: ", res);
+        setTripData(res);
       });
     }
   }, [tripId]);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <section className="bg-muted-foreground flex flex-row flex-1 justify-center">
-        <article className="bg-primary-foreground w-3/4">
-          <h1></h1>
-        </article>
-      </section>
-    </div>
+    tripData && (
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <section className="bg-muted-foreground flex flex-row flex-1 justify-center">
+          <article className="flex flex-col gap-4 bg-primary-foreground w-3/4 px-4 py-8 mt-4 border-primary border-4 rounded-sm">
+            <h1 className="text-3xl font-semibold">
+              ✈️ Travel plan:{" "}
+              {tripData.trip.JSON.destination.country +
+                " - " +
+                tripData.trip.JSON.destination.region}
+            </h1>
+            <p className="text-lg font-semibold">
+              {tripData.log.resultText.introductionText}
+            </p>
+            <img
+              src={tripData.trip.JSON.photo}
+              alt={`A photo of the destination (${tripData.trip.JSON.destination.country} - ${tripData.trip.JSON.destination.region})`}
+              className="rounded-md w-full h-96 object-cover"
+            />
+            <p
+              className="text-xl
+              font-semibold"
+            >
+              Turiscticts atractions 🏦
+            </p>
+            <ul>
+              {tripData.log.resultText.pointsOfInterest.map((place, index) => (
+                <li className="text-lg" key={index}>
+                  <span className="text-lg font-semibold">
+                    {place.LOCATION}
+                  </span>
+                  <span className="text-lg">
+                    {" - "}
+                    {place.DESCRIPTION}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-xl font-semibold">Tips</p>
+            <p className="text-lg">Traveling tip 🚃</p>
+            <p className="text-lg">
+              {tripData.log.resultText.tips.TRAVEL_RELATED}
+            </p>
+            <p className="text-lg">Money saving tip 💰</p>
+            <p className="text-lg">
+              {tripData.log.resultText.tips.ECONOMY_RELATED}
+            </p>
+            <p className="text-xl font-semibold">Useful information</p>
+            <p className="text-lg">Etiquette 🎩</p>
+            <ul>
+              {tripData.log.resultText.usefulInformations.ETIQUETTE.map(
+                (etiquette, index) => (
+                  <li key={index} className="text-lg">
+                    {etiquette}
+                  </li>
+                )
+              )}
+            </ul>
+            <p className="text-lg">Food 🍲</p>
+            <ul>
+              {tripData.log.resultText.usefulInformations.FOOD.map(
+                (food, index) => (
+                  <li key={index} className="text-lg">
+                    {food}
+                  </li>
+                )
+              )}
+            </ul>
+            <p className="text-lg">Greetings 🎉</p>
+            <ul>
+              {tripData.log.resultText.usefulInformations.GREETINGS.map(
+                (greeting, index) => (
+                  <li key={index} className="text-lg">
+                    {greeting}
+                  </li>
+                )
+              )}
+            </ul>
+            <p className="text-lg">Language 🗣️</p>
+            <ul>
+              {tripData.log.resultText.usefulInformations.LANGUAGE.map(
+                (language, index) => (
+                  <li key={index} className="text-lg">
+                    {language.IN_LOCAL_LANGUAGE} - {language.PRONUNCIATION}
+                  </li>
+                )
+              )}
+            </ul>
+            <p className="text-xl font-semibold">Weather 🌦️</p>
+            <p className="text-lg">{tripData.log.resultText.weatherText}</p>
+          </article>
+        </section>
+      </div>
+    )
   );
 }
