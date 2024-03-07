@@ -3,7 +3,7 @@ import { FastifyInstance } from "fastify";
 import { z } from "zod";
 
 export const getAIChatRoute = async (app: FastifyInstance) => {
-  app.post("/ai/chat/:type", async (request, reply) => {
+  app.post("/ai/chat", async (request, reply) => {
     // @ts-expect-error
     const userId = request.userID;
     if (!userId) {

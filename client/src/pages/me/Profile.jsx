@@ -204,7 +204,7 @@ export function ProfilePage() {
                               .toLowerCase()
                               .includes(search.toLowerCase()) &&
                             city.toLocaleLowerCase() !==
-                              userData?.itaCode.toLocaleLowerCase()
+                              userData?.itaCode?.toLocaleLowerCase()
                           ) {
                             return (
                               <div key={city} className="flex flex-row gap-2">

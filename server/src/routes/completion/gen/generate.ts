@@ -102,7 +102,7 @@ Trip:
     messages: [
       {
         role: "user",
-        content: prompt,
+        content: promptMessage,
       },
     ],
     stream: false,
@@ -115,7 +115,7 @@ Trip:
       userId: trip.userId,
       tripId: trip.id,
       resultText: message,
-      promptText: promptMessage,
+      promptText: prompt,
       messages: {
         create: [
           {

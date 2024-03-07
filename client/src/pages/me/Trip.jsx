@@ -1,3 +1,4 @@
+import { ChatSection } from "@/components/chat-modal";
 import { Navbar } from "@/components/navbar";
 import { isLogged } from "@/lib/hanko";
 import { getTripCompletion } from "@/lib/myapi";
@@ -33,8 +34,8 @@ export function TripPageVisualizer() {
     tripData && (
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <section className="bg-muted-foreground flex flex-row flex-1 justify-center">
-          <article className="flex flex-col gap-4 bg-primary-foreground w-3/4 px-4 py-8 my-4 border-primary border-4 rounded-sm">
+        <section className="bg-muted-foreground flex flex-col flex-1 justify-center items-center pb-4">
+          <article className="flex flex-col gap-4 bg-primary-foreground w-1/2 px-4 py-8 my-4 border-primary border-4 rounded-sm">
             <h1 className="text-3xl font-semibold">
               ✈️ Travel plan:{" "}
               {tripData.trip.JSON.destination.country +
@@ -121,6 +122,7 @@ export function TripPageVisualizer() {
             <p className="text-xl font-semibold">Weather 🌦️</p>
             <p className="text-lg">{tripData.log.resultText.weatherText}</p>
           </article>
+          <ChatSection id={tripData.log.id} />
         </section>
       </div>
     )

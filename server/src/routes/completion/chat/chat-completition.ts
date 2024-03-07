@@ -1,12 +1,12 @@
-import { OpenAIStream, streamToResponse } from "ai";
+import { OpenAIStream } from "ai";
+import { FastifyInstance } from "fastify";
+import { ChatCompletionMessageParam } from "openai/resources/chat";
+import { z } from "zod";
 import { openai, streamRes } from "../../../lib/opeanai";
 import { prisma } from "../../../lib/prisma";
-import { FastifyInstance } from "fastify";
-import { z } from "zod";
-import { ChatCompletionMessageParam } from "openai/resources/chat";
 
 export const getAIChatCompleteRoute = async (app: FastifyInstance) => {
-  app.post("/ai/chat/:type/complete", async (request, reply) => {
+  app.post("/ai/chat/complete", async (request, reply) => {
     // @ts-expect-error
     const userId = request.userID;
     if (!userId) {
