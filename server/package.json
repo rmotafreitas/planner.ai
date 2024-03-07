@@ -37,6 +37,8 @@
     "fastify": "^4.23.1",
     "fastify-auth0-verify": "^1.2.1",
     "jose": "^5.0.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.11",
     "openai": "^4.6.0",
     "zod": "^3.22.2"
   }
