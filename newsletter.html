@@ -44,6 +44,22 @@
         font-weight: bold;
         color: #444444;
       }
+      img {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+      }
+      th,
+      td {
+        padding: 8px;
+        border-bottom: 1px solid #dddddd;
+        text-align: left;
+      }
     </style>
   </head>
   <body>
@@ -54,13 +70,24 @@
       <!-- Loop through each desired destination -->
       <div>
         <h2>Travel to: {destination.city} ✈️</h2>
+        <img src="{destination.photo}" />
         <ul>
           <li class="subtitle">Weather forecast:</li>
           <p>{destination.weatherForecast} ☀️</p>
           <li class="subtitle">Travel tips:</li>
-          <p>{destination.travelTips} ✈️</p>
           <li class="subtitle">Flights information:</li>
-          <p>{destination.flightsInfo} 🛫</p>
+          <table>
+            <tr>
+              <th>Departure Time</th>
+              <th>Arrival Time</th>
+              <th>Price</th>
+            </tr>
+            <tr>
+              <td>{destination}</td>
+              <td>{destination}</td>
+              <td>{destination}</td>
+            </tr>
+          </table>
         </ul>
       </div>
 

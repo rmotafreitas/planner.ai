@@ -332,6 +332,77 @@ export const sendNewsletter = async ({
     return;
   }
   for (const destinationCode of wishList) {
+    let html = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Newsletter</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333333;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      p {
+        color: #666666;
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: 12px;
+      }
+      li {
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        margin-top: 8px;
+        margin-bottom: 4px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #444444;
+      }
+      img {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+      }
+      th,
+      td {
+        padding: 8px;
+        border-bottom: 1px solid #dddddd;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Daily Newsletter 📰</h1>
+      <p>Hello! 🌟</p>
+
+      <!-- Loop through each desired destination -->
+`;
     const information = await scrapeData({
       origin: originCode,
       destination: destinationCode,
@@ -358,7 +429,55 @@ export const sendNewsletter = async ({
       ],
       stream: false,
     });
-    const resGPT = response.choices[0].message.content;
-    console.log({ resGPT });
+    let resGPT = response.choices[0].message.content;
+    try {
+      resGPT = JSON.parse(resGPT);
+      information.GPT = resGPT;
+      const destination = `${information.destination.country} - ${information.destination.region}`;
+      const photo = information.photo;
+      const weather = information.GPT.weatherText;
+      const travelTips = information.GPT.tipsText;
+      const flightsInfo = information.GPT.flightsList;
+
+      html += `
+      <div>
+        <h2>Travel to: ${destination} ✈️</h2>
+        <img src="${photo}" />
+        <ul>
+          <li class="subtitle">Weather forecast:</li>
+          <p>${weather} ☀️</p>
+          <li class="subtitle">Travel tips:</li>
+          <p>${travelTips} ✈️</p>
+          <li class="subtitle">Flights information:</li>
+          <table>
+            <tr>
+              <th>Departure Time</th>
+              <th>Arrival Time</th>
+              <th>Price</th>
+            </tr>`;
+
+      for (const flight of flightsInfo) {
+        html += `
+            <tr>
+                <td>${flight.TIME_DEPART}</td>
+                <td>${flight.TIME_ARRIVAL}</td>
+                <td>${flight.PRICE}</td>
+            </tr>`;
+      }
+
+      html += `</table>
+        </ul>
+      </div>`;
+    } catch (error) {
+      console.error("Erro ao converter JSON:", error);
+      continue;
+    }
+    html += `
+    <p>We hope you enjoy your upcoming adventures! 🌍</p>
+    <p>Best regards,<br />Your travel team 🌟</p>
+  </div>
+</body>
+</html>`;
+    console.log(html);
   }
 };
