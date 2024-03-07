@@ -1,5 +1,7 @@
+import { CardFeature } from "@/components/card-feature";
 import { FormExplore } from "@/components/form-explore";
 import { Navbar } from "@/components/navbar";
+import { Robot, Chat, EnvelopeSimple, Funnel } from "@phosphor-icons/react";
 
 export function HomePage() {
   return (
@@ -28,7 +30,49 @@ export function HomePage() {
             using our AI-powered Trip Planner.
           </h3>
         </section>
-        <section className="flex flex-row justify-evenly w-5/6 items-center gap-6 mb-16 max-md:flex-col max-md:items-center"></section>
+        <section className="flex flex-row justify-evenly w-5/6 items-start gap-6 mb-16 max-xl:flex-col max-md:items-center">
+          <CardFeature
+            title="AI Recommendations"
+            description="Get personalized recommendations for your next trip"
+            Icon={() => (
+              <Robot className="w-20 h-20 text-primary border-border border-2 p-1 rounded-xl" />
+            )}
+            weight="bold"
+          />
+          <CardFeature
+            title="AI Chat"
+            description={"Discuss your travel plans with our AI assistant"}
+            Icon={() => (
+              <Chat
+                className="w-20 h-20 text-primary border-border border-2 p-1 rounded-xl"
+                ocess
+              />
+            )}
+            weight="bold"
+          />
+          <CardFeature
+            title="News Letter"
+            description="Stay updated with the latest travel updates and news"
+            Icon={() => (
+              <EnvelopeSimple
+                className="w-20 h-20 text-primary border-border border-2 p-1 rounded-xl"
+                ocess
+              />
+            )}
+            weight="bold"
+          />
+          <CardFeature
+            title="Filter Options"
+            description="Filter your search results based on your preferences"
+            Icon={() => (
+              <Funnel
+                className="w-20 h-20 text-primary border-border border-2 p-1 rounded-xl"
+                ocess
+              />
+            )}
+            weight="bold"
+          />
+        </section>
       </div>
     </div>
   );
