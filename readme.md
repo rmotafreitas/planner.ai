@@ -81,7 +81,7 @@ Inside the app, you will find several functionalities, including:
 - Node 🟢
 - Typescript 📘
 - Fastify 🚀
-- OpenAI 🧠 (Sometimes with streaming)
+- OpenAI 🧠 (Sometimes with streaming, and some prompt engineering)
 - ORM: Prisma 🛠️
 - Database: SqlLite 📊
 
@@ -96,3 +96,5 @@ Ricardo Freitas - [@rmotafreitas](https://x.com/rmotafreitas)
 Project Link: [https://github.com/rmotafreitas/UPDATE2324](https://github.com/rmotafreitas/UPDATE2324)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+> Note: Setup is in [docs/setup.md](./docs/setup.md)

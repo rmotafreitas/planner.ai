@@ -46,7 +46,7 @@ const authJWTCHeaderHanko = async (
 };
 
 app.register(fastifyCors, {
-  origin: "http://localhost:5173",
+  origin: "*",
 });
 
 app.addHook("preHandler", authJWTCHeaderHanko);
