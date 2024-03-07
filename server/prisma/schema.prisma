@@ -16,6 +16,13 @@ model Prompt {
   template String
 }
 
+model User {
+  id                     String  @id @default(uuid())
+  email                  String  @unique
+  wishList               String // Joiont by comma
+  subscribedToNewsletter Boolean @default(false)
+}
+
 model Trip {
   id                   String   @id @default(uuid())
   startLocationITACode String
