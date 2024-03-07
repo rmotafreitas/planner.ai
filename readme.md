@@ -42,7 +42,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot](./client/public/screen.png)](https://docus-autos.vercel.app/)
+[![Product Name Screen Shot](./client/public/screen.png)](#)
 
 This app was developed to participate in the [FCUP Update 23/24 Hackathon](https://www.instagram.com/nucc_fcup/) and it consists of an AI that can help plan your trips! 🌍
 
