@@ -38,7 +38,10 @@ export function ChatSection({ id }) {
         }, 100);
       }}
     >
-      <DialogTrigger disabled={!id} className="flex items-center max-sm:w-full">
+      <DialogTrigger
+        disabled={!id}
+        className="flex items-center max-sm:w-full fixed bottom-4 right-4"
+      >
         <Button
           onClick={() => {
             setOpen(true);
@@ -113,6 +116,7 @@ export function ChatModal({ id, close, open }) {
   useEffect(() => {
     scrollChat();
   }, [completion, isLoading]);
+
   let flag = 0;
 
   return (
