@@ -29,11 +29,8 @@ export function Navbar() {
       <Link to="/" className="text-primary font-bold text-2xl bg-gradient-to-r">
         Planner
       </Link>
-      <ul className="flex gap-8 items-center">
+      <ul className="flex gap-5 items-center">
         <ModeToggle />
-        <li className="text-lg font-semibold">
-          {/* <Link to="/2">2</Link> */}
-        </li>
         <li className="text-lg font-semibold">
           <Link
             to={isLogged ? "/me" : "/auth"}
