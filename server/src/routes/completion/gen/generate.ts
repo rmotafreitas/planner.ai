@@ -105,10 +105,11 @@ Trip:
         content: promptMessage,
       },
     ],
-    max_tokens: 400,
     stream: false,
   });
 
+  console.log(response.object);
+  console.log(response.choices);
   const message = response.choices[0].message.content;
 
   const log = await prisma.log.create({
@@ -116,7 +117,7 @@ Trip:
       userId: trip.userId,
       tripId: trip.id,
       resultText: message,
-      promptText: prompt,
+      promptText: promptMessage,
       messages: {
         create: [
           {
