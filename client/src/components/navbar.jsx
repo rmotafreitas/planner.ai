@@ -27,7 +27,7 @@ export function Navbar() {
   return (
     <nav className="flex px-8 py-4 justify-between w-full items-center border-border border-b-2">
       <Link to="/" className="text-primary font-bold text-2xl bg-gradient-to-r">
-        Planner
+        planner.ai
       </Link>
       <ul className="flex gap-5 items-center">
         <ModeToggle />
