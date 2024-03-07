@@ -61,7 +61,7 @@ export function FormExplore() {
       <div className="flex flex-col justify-center items-center w-full h-full">
         <img
           className="w-36 h-36 animate-spin"
-          src="../../public/laoder.gif"
+          src="/laoder.gif"
           alt="loading"
         />
         <p className="text-primary text-2xl font-bold mt-4">
