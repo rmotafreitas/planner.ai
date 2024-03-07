@@ -55,6 +55,10 @@ hanko-auth::part(form-item) {
 
 hanko-auth::part(container) {
   background: var(--background);
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  align-self: center;
 }
 
 hanko-auth::part(headline1) {
@@ -105,4 +109,8 @@ hanko-auth {
 hanko-profile {
   --background-color: transparent;
   --color: var(--foreground);
+  --justify-content: center;
+  --align-items: center;
+  --display: flex;
+  --flex-direction: column;
 }

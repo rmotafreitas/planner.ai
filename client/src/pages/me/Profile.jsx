@@ -42,7 +42,7 @@ export function ProfilePage() {
           <section className="w-full flex flex-row justify-center gap-2 items-center max-sm:flex-col">
             <Button className="flex flex-1 text-white bg-primary max-sm:w-full">
               <Link
-                to="/me/history"
+                to="/me/logs"
                 className="flex flex-row items-center w-full h-full justify-center"
               >
                 <History size={24} className="mr-2" />

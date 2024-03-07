@@ -16,10 +16,26 @@ export const deleteAICompletionHistoryRoute = async (app: FastifyInstance) => {
 
     const { id } = paramsSchema.parse(request.params);
 
-    return await prisma.log.delete({
+    const tripId = (
+      await prisma.log.findUnique({
+        where: {
+          id,
+        },
+      })
+    )?.tripId;
+
+    await prisma.log.delete({
       where: {
         id,
       },
     });
+
+    if (tripId) {
+      await prisma.trip.delete({
+        where: {
+          id: tripId,
+        },
+      });
+    }
   });
 };

@@ -7,6 +7,7 @@ import { UserIdContext } from "./contexts/user.context";
 import { LoginPage } from "./pages/Login";
 import { ProfilePage } from "./pages/me/Profile";
 import { TripPageVisualizer } from "./pages/me/Trip";
+import { LogPage } from "./pages/me/logs/Log";
 
 export function App() {
   const [userId, setUserId] = useState("");
@@ -28,6 +29,7 @@ export function App() {
             <Route path="/auth" element={<LoginPage />} />
             <Route path="/me" element={<ProfilePage />} />
             <Route path="/me/trip/:tripId" element={<TripPageVisualizer />} />
+            <Route path="/me/logs" element={<LogPage />} />
             {/* <Route path="*" element={<NotFound />} />*/}
           </Routes>
         </Router>
