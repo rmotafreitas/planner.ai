@@ -74,9 +74,8 @@ app
   })
   .then((address) => {
     console.log(`Server is listening on ${address}`);
-    // Configure the cron job to run every day at 9 AM
     cron.schedule(
-      "*/1 * * * *", // Schedule to run at 9 AM every day
+      "0 */1 * * *", // Every 1 hour
       async () => {
         const allUsers = await prisma.user.findMany();
         for (const user of allUsers) {
