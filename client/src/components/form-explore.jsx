@@ -21,9 +21,20 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -44,6 +55,7 @@ const statusMessages = {
   activities: "Getting activities...",
   photo: "Getting photo...",
   gpt: "Generating trip plan...",
+  error: "No trip found, for the selected location, price and date.",
 };
 
 export function FormExplore() {
@@ -57,7 +69,7 @@ export function FormExplore() {
   const [date, setDate] = useState();
   const maxPrice = useRef();
 
-  if (status !== "waiting") {
+  if (status !== "waiting" && status !== "error") {
     return (
       <div className="flex flex-col justify-center items-center w-full h-full">
         <img
@@ -283,6 +295,30 @@ export function FormExplore() {
         <p>Random Destination</p>
         <DiceFive size={24} weight="bold" className="ml-2" />
       </Button>
+      <AlertDialog open={status === "error"} close={() => setStatus("waiting")}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>No trips found</AlertDialogTitle>
+            <AlertDialogDescription>
+              We couldn't find any trips for the selected location, price and
+              date.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              onClick={() => {
+                setStatus("waiting");
+                setStartLocation("");
+                setEndLocation("");
+                setDate(null);
+                maxPrice.current.value = "";
+              }}
+            >
+              Go Back
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
