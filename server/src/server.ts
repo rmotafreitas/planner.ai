@@ -1,16 +1,17 @@
-import "dotenv/config";
 import { fastifyCors } from "@fastify/cors";
-import { FastifyReply, FastifyRequest, fastify } from "fastify";
-import { getAllPromptsRoute } from "./routes/get-all-prompts";
 import fastifystatic from "@fastify/static";
-import path from "path";
-import { saveAITripCompletion } from "./routes/save-ai-completion";
-import { getAILogsCompletion } from "./routes/get-ai-log";
+import "dotenv/config";
+import { FastifyReply, FastifyRequest, fastify } from "fastify";
 import * as jose from "jose";
-import { getAICompletionHistoryRoute } from "./routes/get-ai-completion-log";
+import cron from "node-cron";
+import path from "path";
 import { deleteAICompletionHistoryRoute } from "./routes/delete-ai-completion-log";
-import { uploadTripJSONRoute } from "./routes/upload-trip-json";
 import { generateAICompletionRoute } from "./routes/generate-ai-completion-trip";
+import { getAICompletionHistoryRoute } from "./routes/get-ai-completion-log";
+import { getAILogsCompletion } from "./routes/get-ai-log";
+import { getAllPromptsRoute } from "./routes/get-all-prompts";
+import { saveAITripCompletion } from "./routes/save-ai-completion";
+import { uploadTripJSONRoute } from "./routes/upload-trip-json";
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const app = fastify();
@@ -69,4 +70,16 @@ app
   })
   .then((address) => {
     console.log(`Server is listening on ${address}`);
+    // Configurar a tarefa cron para ser executada todos os dias às 9h
+    cron.schedule(
+      "*/1 * * * *",
+      () => {
+        console.log("Enviando newsletter...");
+        // enviarNewsletter(); // Chame a função para enviar a newsletter aqui
+      },
+      {
+        scheduled: true,
+        timezone: "Europe/Lisbon", // Defina o fuso horário apropriado
+      }
+    );
   });

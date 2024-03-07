@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Newsletter</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333333;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      p {
+        color: #666666;
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: 12px;
+      }
+      li {
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        margin-top: 8px;
+        margin-bottom: 4px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #444444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Daily Newsletter 📰</h1>
+      <p>Hello! 🌟</p>
+
+      <!-- Loop through each desired destination -->
+      <div>
+        <h2>{destination.country} - {destination.city} ✈️</h2>
+        <ul>
+          <li class="subtitle">Weather forecast:</li>
+          <p>{destination.weatherForecast} ☀️</p>
+          <li class="subtitle">Travel tips:</li>
+          <p>{destination.travelTips} ✈️</p>
+          <li class="subtitle">Flights information:</li>
+          <p>{destination.flightsInfo} 🛫</p>
+        </ul>
+      </div>
+
+      <div>
+        <h2>{destination.country} - {destination.city} ✈️</h2>
+        <ul>
+          <li class="subtitle">Weather forecast:</li>
+          <p>{destination.weatherForecast} ☀️</p>
+          <li class="subtitle">Travel tips:</li>
+          <p>{destination.travelTips} ✈️</p>
+          <li class="subtitle">Flights information:</li>
+          <p>{destination.flightsInfo} 🛫</p>
+        </ul>
+      </div>
+
+      <p>We hope you enjoy your upcoming adventures! 🌍</p>
+      <p>Best regards,<br />Your travel team 🌟</p>
+    </div>
+  </body>
+</html>
