@@ -487,13 +487,13 @@ export const sendNewsletter = async ({
     port: 587,
     secure: false, // true para SSL
     auth: {
-      user: "no-pi-reply-isep@outlook.com",
+      user: process.env.OUTLOOK_EMAIL,
       pass: process.env.EMAIL_PASSWORD,
     },
   });
   // Definir as opções do e-mail
   const mailOptions = {
-    from: "no-pi-reply-isep@outlook.com",
+    from: process.env.OUTLOOK_EMAIL,
     to: email,
     subject: "Your daily newsletter 📰",
     html,
