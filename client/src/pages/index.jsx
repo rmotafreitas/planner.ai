@@ -36,7 +36,7 @@ export function HomePage() {
             using our AI-powered Trip Planner.
           </h3>
         </section>
-        <section className="flex flex-row justify-evenly w-5/6 items-start gap-6 mb-16 max-xl:flex-col max-md:items-center">
+        <section className="flex flex-row justify-evenly w-5/6 items-start gap-6 mb-16 max-xl:flex-wrap max-md:items-center">
           <CardFeature
             title="AI Recommendations"
             description="Get personalized recommendations for your next trip"
