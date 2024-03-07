@@ -102,7 +102,7 @@ Trip:
     messages: [
       {
         role: "user",
-        content: promptMessage,
+        content: prompt,
       },
     ],
     stream: false,
