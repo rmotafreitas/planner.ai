@@ -108,8 +108,6 @@ Trip:
     stream: false,
   });
 
-  console.log(response.object);
-  console.log(response.choices);
   const message = response.choices[0].message.content;
 
   const log = await prisma.log.create({

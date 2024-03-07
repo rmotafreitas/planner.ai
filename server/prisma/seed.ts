@@ -6,7 +6,7 @@ async function main() {
 
   await prisma.prompt.create({
     data: {
-      title: "Title for Prompt 1",
+      title: "DOCUMENT",
       template: `
       Your role is to generate a detailed itinerary for the trip, taking into account arrival and departure times:
 - OBJCET {
@@ -58,6 +58,38 @@ Return ONLY a json object in list format as in the example below, if there no in
       "usefulInformations": FILL,
       "tips": FILL,
       "weatherText": FILL
+}
+'''
+
+Trip:
+'''
+{JSON}
+'''`.trim(),
+    },
+  });
+
+  await prisma.prompt.create({
+    data: {
+      title: "NEWSLETTER",
+      template: `
+	  Your task is to generate data for a daily newsletter to be sent to subscribers that are planning to make a trip.
+
+- Weather forecast for the destination city. STRING: With the existing temperature data, say things like, is it important to use an umbrella? 
+- Travel tips for the destination. SMALL TEXT STRING WITH JUST SOME COSTUMES/CULTURAL/LOCALS INFORMATIONS
+- Flights information for the destination. ARRAY[
+												OBJCET: {
+													TIME_DEPART,
+													TIME_ARRIVAL,
+													PRICE
+												}
+											]
+
+Return ONLY a json object in this format as in the example below, if there no information in certain keys, create it up yoursef, dont leave any empty string neither empty arrays, dont put [], craft/create the information yourself if needed:
+'''
+{
+     "tipsText": FILL,
+     "weatherText": FILL,
+	 "flightsList": FILL
 }
 '''
 

@@ -12,7 +12,7 @@ datasource db {
 
 model Prompt {
   id       String @id @default(uuid())
-  title    String
+  title    String @unique
   template String
 }
 

@@ -79,9 +79,7 @@ app
       "*/1 * * * *", // Schedule to run at 9 AM every day
       async () => {
         const allUsers = await prisma.user.findMany();
-        console.log(allUsers);
         for (const user of allUsers) {
-          console.log("Sending newsletter to", user.email);
           const wishList = user.wishList
             .split(",")
             .filter((x) => x !== "" && x !== user.itaCode);
