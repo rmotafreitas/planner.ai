@@ -2,6 +2,7 @@
 import axios from "axios";
 import { openai } from "./opeanai";
 import { prisma } from "./prisma";
+import * as nodemailer from "nodemailer";
 
 const getToken = async () => {
   const clientId = process.env.VITE_API_AMADEUS_CLIENT_ID;
@@ -331,78 +332,78 @@ export const sendNewsletter = async ({
   if (!prompt) {
     return;
   }
+  let html = `<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Daily Newsletter</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f0f0f0;
+          padding: 20px;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background-color: #ffffff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+          color: #333333;
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 16px;
+        }
+        p {
+          color: #666666;
+          font-size: 16px;
+          margin-bottom: 12px;
+        }
+        ul {
+          list-style-type: none;
+          padding: 0;
+          margin-bottom: 12px;
+        }
+        li {
+          margin-bottom: 8px;
+        }
+        .subtitle {
+          margin-top: 8px;
+          margin-bottom: 4px;
+          font-size: 18px;
+          font-weight: bold;
+          color: #444444;
+        }
+        img {
+          width: 100%;
+          border-radius: 8px;
+          margin-bottom: 12px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 12px;
+        }
+        th,
+        td {
+          padding: 8px;
+          border-bottom: 1px solid #dddddd;
+          text-align: left;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Daily Newsletter</h1>
+        <p>Hello!</p>
+  
+        <!-- Loop through each desired destination -->
+  `;
   for (const destinationCode of wishList) {
-    let html = `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daily Newsletter</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        padding: 20px;
-      }
-      .container {
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        color: #333333;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 16px;
-      }
-      p {
-        color: #666666;
-        font-size: 16px;
-        margin-bottom: 12px;
-      }
-      ul {
-        list-style-type: none;
-        padding: 0;
-        margin-bottom: 12px;
-      }
-      li {
-        margin-bottom: 8px;
-      }
-      .subtitle {
-        margin-top: 8px;
-        margin-bottom: 4px;
-        font-size: 18px;
-        font-weight: bold;
-        color: #444444;
-      }
-      img {
-        width: 100%;
-        border-radius: 8px;
-        margin-bottom: 12px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 12px;
-      }
-      th,
-      td {
-        padding: 8px;
-        border-bottom: 1px solid #dddddd;
-        text-align: left;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Daily Newsletter 📰</h1>
-      <p>Hello! 🌟</p>
-
-      <!-- Loop through each desired destination -->
-`;
     const information = await scrapeData({
       origin: originCode,
       destination: destinationCode,
@@ -439,15 +440,15 @@ export const sendNewsletter = async ({
       const travelTips = information.GPT.tipsText;
       const flightsInfo = information.GPT.flightsList;
 
-      html += `
+      let html2 = `
       <div>
-        <h2>Travel to: ${destination} ✈️</h2>
+        <h2>Travel to: ${destination}</h2>
         <img src="${photo}" />
         <ul>
           <li class="subtitle">Weather forecast:</li>
-          <p>${weather} ☀️</p>
+          <p>${weather}</p>
           <li class="subtitle">Travel tips:</li>
-          <p>${travelTips} ✈️</p>
+          <p>${travelTips}</p>
           <li class="subtitle">Flights information:</li>
           <table>
             <tr>
@@ -457,7 +458,7 @@ export const sendNewsletter = async ({
             </tr>`;
 
       for (const flight of flightsInfo) {
-        html += `
+        html2 += `
             <tr>
                 <td>${flight.TIME_DEPART}</td>
                 <td>${flight.TIME_ARRIVAL}</td>
@@ -465,19 +466,46 @@ export const sendNewsletter = async ({
             </tr>`;
       }
 
-      html += `</table>
+      html2 += `</table>
         </ul>
       </div>`;
+      html += html2;
     } catch (error) {
       console.error("Erro ao converter JSON:", error);
       continue;
     }
-    html += `
-    <p>We hope you enjoy your upcoming adventures! 🌍</p>
-    <p>Best regards,<br />Your travel team 🌟</p>
-  </div>
+  }
+  html += `
+  <p>We hope you enjoy your upcoming adventures!</p>
+  <p>Best regards,<br />Your travel team</p>
+</div>
 </body>
 </html>`;
-    console.log(html);
-  }
+  // Configuração do transporte
+  const transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true para SSL
+    auth: {
+      user: "no-pi-reply-isep@outlook.com",
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+  // Definir as opções do e-mail
+  const mailOptions = {
+    from: "no-pi-reply-isep@outlook.com",
+    to: email,
+    subject: "Your daily newsletter 📰",
+    html,
+  };
+  console.log(mailOptions);
+
+  // Enviar e-mail
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.error("Erro ao enviar e-mail:", error);
+    } else {
+      console.log("E-mail enviado:", info.response);
+    }
+  });
 };
